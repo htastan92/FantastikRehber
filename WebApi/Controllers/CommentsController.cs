@@ -26,7 +26,7 @@ namespace WebApi.Controllers
         }
 
         // GET: api/Category/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("getbyid")]
         public IActionResult Get(int id)
         {
             var result = _commentService.GetAdmin(id);
@@ -58,7 +58,7 @@ namespace WebApi.Controllers
             return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
         }
 
-        [HttpPost("{id}", Name = "publish")]
+        [HttpPost("draft")]
         public IActionResult Draft(int id)
         {
             var result = _commentService.Draft(id);

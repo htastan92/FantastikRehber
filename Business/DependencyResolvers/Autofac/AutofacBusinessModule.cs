@@ -1,8 +1,12 @@
 ﻿using Autofac;
 using Business.Abstract;
 using Business.Concrate;
+using Core.DataAccess.Abstract;
+using Core.DataAccess.Concrate;
+using Core.Entities;
 using DataAccess.Abstract;
 using DataAccess.Concrate;
+using DataAccess.Context;
 
 namespace Business.DependencyResolvers.Autofac
 {

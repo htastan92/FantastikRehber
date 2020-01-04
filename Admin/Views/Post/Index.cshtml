@@ -1,4 +1,5 @@
-﻿@model Admin.Models.PostViewModels.PostListViewModel
+﻿@using Business.Enums
+@model Admin.Models.PostViewModels.PostListViewModel
 
 @{
     ViewBag.Title = "Gönderiler";
@@ -20,17 +21,23 @@
     <tbody>
         @foreach (var post in Model.Posts)
         {
-            <tr>
-                <td>@post.PostId</td>
-                <td>@post.Title</td>
-                <td>@post.StatusId</td>
-                <td>
-                    <a href="@Url.Action("Edit", new {id = post.PostId})" class="btn btn-success btn-sm">Düzenle</a>
-                    <a href="@Url.Action("Draft", new {id = post.PostId})" class="btn btn-warning btn-sm">Taslak</a>
-                    <a href="@Url.Action("Publish", new {id = post.PostId})" class="btn btn-info btn-sm">Yayınla</a>
-                    <a href="@Url.Action("Remove", new {id = post.PostId})" class="btn btn-danger btn-sm" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">Sil</a>
-                </td>
-            </tr>
+        <tr>
+            <td>@post.PostId</td>
+            <td>@post.Title</td>
+            @if (post.StatusId == (int)Statuses.Active)
+            {
+                <td>Yayında</td>
+            }else if (post.StatusId == (int)Statuses.Passive)
+            {
+                <td>Taslak</td>
+            }
+            <td>
+                <a href="@Url.Action("Edit", new {id = post.PostId})" class="btn btn-success btn-sm">Düzenle</a>
+                <a href="@Url.Action("Draft", new {id = post.PostId})" class="btn btn-warning btn-sm">Taslak</a>
+                <a href="@Url.Action("Publish", new {id = post.PostId})" class="btn btn-info btn-sm">Yayınla</a>
+                <a href="@Url.Action("Remove", new {id = post.PostId})" class="btn btn-danger btn-sm" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">Sil</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

@@ -26,7 +26,7 @@ namespace WebApi.Controllers
         }
 
         // GET: api/Category/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("getbyid")]
         public IActionResult Get(int id)
         {
             var result = _categoryService.GetAdmin(id);
