@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
 
@@ -14,54 +16,54 @@ namespace Business.Concrate
             _commentDal = commentDal;
         }
 
-        public Comment GetWeb(string slug)
+        public IDataResult<Comment> GetWeb(string slug)
         {
-            return _commentDal.Get(c => c.Slug == slug && c.StatusId == (int)Statuses.Active);
+            return new SuccessDataResult<Comment>(_commentDal.Get(c => c.Slug == slug && c.StatusId == (int)Statuses.Active));
         }
 
-        public Comment GetAdmin(int id)
+        public IDataResult<Comment> GetAdmin(int id)
         {
-            return _commentDal.Get(c => c.CommentId == id && c.StatusId != (int)Statuses.Deleted);
+            return new SuccessDataResult<Comment>(_commentDal.Get(c => c.CommentId == id && c.StatusId != (int)Statuses.Deleted));
         }
 
-        public IList<Comment> GetAllWeb()
+        public IDataResult<IList<Comment>> GetAllWeb()
         {
-            return _commentDal.GetAll(c => c.StatusId == (int) Statuses.Active);
+            return new SuccessDataResult<IList<Comment>>(_commentDal.GetAll(c => c.StatusId == (int) Statuses.Active));
         }
 
-        public IList<Comment> GetAllAdmin()
+        public IDataResult<IList<Comment>> GetAllAdmin()
         {
-            return _commentDal.GetAll(c => c.StatusId != (int)Statuses.Deleted);
+            return new SuccessDataResult<IList<Comment>>(_commentDal.GetAll(c => c.StatusId != (int)Statuses.Deleted));
         }
 
-        public void Add(Comment comment)
+        public IResult Add(Comment comment)
         {
             _commentDal.Add(comment);
+            return new SuccessResult(Messages.CommentAdded);
         }
 
-        public void Update(Comment comment)
+        public IResult Update(Comment comment)
         {
             _commentDal.Update(comment);
+            return new SuccessResult(Messages.CommentUpdated);
         }
 
-        public void Delete(Comment comment)
-        {
-           _commentDal.Delete(comment);
+        public IResult Publish(int id)
+        { 
+            _commentDal.Publish(id);
+            return new SuccessResult(Messages.CommentPublished);
         }
 
-        public bool Publish(int id)
+        public IResult Draft(int id)
         {
-            return _commentDal.Publish(id);
+            _commentDal.Draft(id);
+            return new SuccessResult(Messages.CommentDrafted);
         }
 
-        public bool Draft(int id)
+        public IResult Remove(int id)
         {
-            return _commentDal.Draft(id);
-        }
-
-        public bool Remove(int id)
-        {
-            return _commentDal.Remove(id);
+            _commentDal.Remove(id);
+            return new SuccessResult(Messages.CommentRemoved);
         }
     }
 }

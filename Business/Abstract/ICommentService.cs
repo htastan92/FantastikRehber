@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
+using Core.Utilities.Results;
 using Entities;
 
 namespace Business.Abstract
 {
     public interface ICommentService
     {
-        Comment GetWeb(string slug);
-        Comment GetAdmin(int id);
-        IList<Comment> GetAllWeb();
-        IList<Comment> GetAllAdmin();
-        void Add(Comment comment);
-        void Update(Comment comment);
-        void Delete(Comment comment);
-        bool Publish(int id);
-        bool Draft(int id);
-        bool Remove(int id);
+        IDataResult<Comment> GetWeb(string slug);
+        IDataResult<Comment> GetAdmin(int id);
+        IDataResult<IList<Comment>> GetAllWeb();
+        IDataResult<IList<Comment>> GetAllAdmin();
+        IResult Add(Comment comment);
+        IResult Update(Comment comment);
+        IResult Publish(int id);
+        IResult Draft(int id);
+        IResult Remove(int id);
     }
 }

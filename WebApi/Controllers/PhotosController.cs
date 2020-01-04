@@ -7,20 +7,20 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class PhotosController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly IPhotoService _photoService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public PhotosController(IPhotoService photoService)
         {
-            _categoryService = categoryService;
+            _photoService = photoService;
         }
 
         // GET: api/Category
         [HttpGet("getlist")]
         public IActionResult GetAll()
         {
-            var result = _categoryService.GetAllWeb();
+            var result = _photoService.GetAllWeb();
             return result.Success ? (IActionResult)Ok(result.Data) : BadRequest(result.Message);
 
         }
@@ -29,46 +29,46 @@ namespace WebApi.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            var result = _categoryService.GetAdmin(id);
+            var result = _photoService.GetAdmin(id);
             return result.Success ? (IActionResult)Ok(result.Data) : BadRequest(result.Message);
         }
 
         // POST: api/Category
         [HttpPost("add")]
-        public IActionResult Add(Category category)
+        public IActionResult Add(Photo photo)
         {
 
-            var result = _categoryService.Add(category);
+            var result = _photoService.Add(photo);
             return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
 
         }
 
         // PUT: api/Category/5
         [HttpPost("update")]
-        public IActionResult Update(Category category)
+        public IActionResult Update(Photo photo)
         {
-            var result = _categoryService.Update(category);
+            var result = _photoService.Update(photo);
             return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpPost("publish")]
         public IActionResult Publish(int id)
         {
-            var result = _categoryService.Publish(id);
+            var result = _photoService.Publish(id);
             return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpPost("{id}", Name = "publish")]
         public IActionResult Draft(int id)
         {
-            var result = _categoryService.Draft(id);
+            var result = _photoService.Draft(id);
             return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpPost("remove")]
         public IActionResult Remove(int id)
         {
-            var result = _categoryService.Remove(id);
+            var result = _photoService.Remove(id);
             return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
         }
 

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
 
@@ -14,54 +16,60 @@ namespace Business.Concrate
             _photoDal = photoDal;
         }
 
-        public Photo GetWeb(string slug)
+        public IDataResult<Photo> GetWeb(string slug)
         {
-            return _photoDal.Get(p => p.Slug == slug && p.StatusId == (int) Statuses.Active);
+            return new SuccessDataResult<Photo>(_photoDal.Get(p => p.Slug == slug && p.StatusId == (int)Statuses.Active));
         }
 
-        public Photo GetAdmin(int id)
+        public IDataResult<Photo> GetAdmin(int id)
         {
-            return _photoDal.Get(p => p.PhotoId == id && p.StatusId != (int)Statuses.Deleted);
+            return new SuccessDataResult<Photo>(_photoDal.Get(p => p.PhotoId == id && p.StatusId != (int)Statuses.Deleted));
         }
 
-        public IList<Photo> GetAllWeb()
+        public IDataResult<IList<Photo>> GetAllWeb()
         {
-            return _photoDal.GetAll(p=>p.StatusId == (int)Statuses.Active);
+            return new SuccessDataResult<IList<Photo>>(_photoDal.GetAll(p => p.StatusId == (int) Statuses.Active));
         }
 
-        public IList<Photo> GetAllAdmin()
+        public IDataResult<IList<Photo>> GetAllAdmin()
         {
-            return _photoDal.GetAll(p => p.StatusId != (int)Statuses.Deleted);
+            return new SuccessDataResult<IList<Photo>>(_photoDal.GetAll(p => p.StatusId != (int)Statuses.Deleted));
         }
 
-        public void Add(Photo photo)
+        public IResult Add(Photo photo)
         {
             _photoDal.Add(photo);
+            return new SuccessResult(Messages.PhotoAdded);
         }
 
-        public void Update(Photo photo)
+        public IResult Update(Photo photo)
         {
             _photoDal.Update(photo);
+            return new SuccessResult(Messages.PhotoUpdated);
         }
 
-        public void Delete(Photo photo)
+        public IResult Delete(Photo photo)
         {
             _photoDal.Delete(photo);
+            return new SuccessResult(Messages.PhotoDeleted);
         }
 
-        public bool Publish(int id)
+        public IResult Publish(int id)
         {
-            return _photoDal.Publish(id);
+            _photoDal.Publish(id);
+            return new SuccessResult(Messages.PhotoPublished);
         }
 
-        public bool Draft(int id)
+        public IResult Draft(int id)
         {
-            return _photoDal.Draft(id);
+           _photoDal.Draft(id);
+           return new SuccessResult(Messages.PhotoDrafted);
         }
 
-        public bool Remove(int id)
+        public IResult Remove(int id)
         {
-            return _photoDal.Remove(id);
+             _photoDal.Remove(id);
+            return new SuccessResult(Messages.PhotoRemoved);
         }
     }
 }

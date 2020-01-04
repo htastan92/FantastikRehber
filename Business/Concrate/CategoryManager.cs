@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
 
@@ -14,54 +16,54 @@ namespace Business.Concrate
             _categoryDal = categoryDal;
         }
 
-        public Category GetWeb(string slug)
+        public IDataResult<Category> GetWeb(string slug)
         {
-            return _categoryDal.Get(c => c.Slug == slug && c.StatusId == (int) Statuses.Active);
+            return new SuccessDataResult<Category>(_categoryDal.Get(c => c.Slug == slug && c.StatusId == (int) Statuses.Active));
         }
 
-        public Category GetAdmin(int id)
+        public IDataResult<Category> GetAdmin(int id)
         {
-            return _categoryDal.Get(c => c.CategoryId == id && c.StatusId != (int)Statuses.Deleted);
+            return new SuccessDataResult<Category>(_categoryDal.Get(c => c.CategoryId == id && c.StatusId != (int)Statuses.Deleted));
         }
 
-        public IList<Category> GetAllWeb()
+        public IDataResult<IList<Category>> GetAllWeb()
         {
-            return _categoryDal.GetAll(c => c.StatusId == (int) Statuses.Active);
+            return new SuccessDataResult<IList<Category>>(_categoryDal.GetAll(c => c.StatusId == (int) Statuses.Active));
         }
 
-        public IList<Category> GetAllAdmin()
+        public IDataResult<IList<Category>> GetAllAdmin()
         {
-            return _categoryDal.GetAll(c => c.StatusId != (int)Statuses.Deleted);
+            return new SuccessDataResult<IList<Category>>(_categoryDal.GetAll(c => c.StatusId != (int)Statuses.Deleted));
         }
 
-        public void Add(Category category)
+        public IResult Add(Category category)
         {
             _categoryDal.Add(category);
+            return new SuccessResult(Messages.CategoryAdded);
         }
 
-        public void Update(Category category)
+        public IResult Update(Category category)
         {
             _categoryDal.Update(category);
+            return new SuccessResult(Messages.CategoryUpdated);
         }
 
-        public void Delete(Category category)
+        public IResult Publish(int id)
         {
-            _categoryDal.Delete(category);
+             _categoryDal.Publish(id);
+             return new SuccessResult(Messages.CategoryPublished);
         }
 
-        public bool Publish(int id)
+        public IResult Draft(int id)
         {
-            return _categoryDal.Publish(id);
+             _categoryDal.Draft(id);
+             return new SuccessResult(Messages.CategoryDrafted);
         }
 
-        public bool Draft(int id)
+        public IResult Remove(int id)
         {
-            return _categoryDal.Draft(id);
-        }
-
-        public bool Remove(int id)
-        {
-            return _categoryDal.Remove(id);
+             _categoryDal.Remove(id);
+             return new SuccessResult(Messages.CategoryRemoved);
         }
     }
 }

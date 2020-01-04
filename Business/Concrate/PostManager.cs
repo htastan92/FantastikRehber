@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
 
@@ -14,54 +16,54 @@ namespace Business.Concrate
             _postDal = postDal;
         }
 
-        public Post GetWeb(string slug)
+        public IDataResult<Post> GetWeb(string slug)
         {
-            return _postDal.Get(p => p.Slug == slug && p.StatusId == (int) Statuses.Active);
+            return new SuccessDataResult<Post>(_postDal.Get(p => p.Slug == slug && p.StatusId == (int) Statuses.Active));
         }
 
-        public Post GetAdmin(int id)
+        public IDataResult<Post> GetAdmin(int id)
         {
-            return _postDal.Get(p => p.PostId == id && p.StatusId != (int)Statuses.Deleted);
+            return new SuccessDataResult<Post>(_postDal.Get(p => p.PostId == id && p.StatusId != (int)Statuses.Deleted));
         }
 
-        public IList<Post> GetAllWeb()
+        public IDataResult<IList<Post>> GetAllWeb()
         {
-            return _postDal.GetAll(p => p.StatusId == (int) Statuses.Active);
+            return new SuccessDataResult<IList<Post>>(_postDal.GetAll(p => p.StatusId == (int) Statuses.Active));
         }
 
-        public IList<Post> GetAllAdmin()
+        public IDataResult<IList<Post>> GetAllAdmin()
         {
-            return _postDal.GetAll(p => p.StatusId != (int)Statuses.Deleted);
+            return new SuccessDataResult<IList<Post>>(_postDal.GetAll(p => p.StatusId != (int)Statuses.Deleted));
         }
 
-        public void Add(Post post)
+        public IResult Add(Post post)
         {
             _postDal.Add(post);
+            return new SuccessResult(Messages.PostAdded);
         }
 
-        public void Update(Post post)
+        public IResult Update(Post post)
         {
             _postDal.Update(post);
+            return new SuccessResult(Messages.PostUpdated);
+        }
+        
+        public IResult Publish(int id)
+        {
+             _postDal.Publish(id);
+             return new SuccessResult(Messages.PostPublished);
         }
 
-        public void Delete(Post post)
+        public IResult Draft(int id)
         {
-            _postDal.Delete(post);
+            _postDal.Draft(id);
+            return new SuccessResult(Messages.PostDrafted);
         }
 
-        public bool Publish(int id)
+        public IResult Remove(int id)
         {
-            return _postDal.Publish(id);
-        }
-
-        public bool Draft(int id)
-        {
-            return _postDal.Draft(id);
-        }
-
-        public bool Remove(int id)
-        {
-            return _postDal.Remove(id);
+            _postDal.Remove(id);
+            return new SuccessResult(Messages.PostRemoved);
         }
     }
 }
