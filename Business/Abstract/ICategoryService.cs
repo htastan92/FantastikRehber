@@ -13,9 +13,9 @@ namespace Business.Abstract
         IDataResult<IList<Category>> GetAllAdmin();
         IResult Add(Category category);
         IResult Update(Category category);
-        IResult Publish(int id);
-        IResult Draft(int id);
-        IResult Remove(int id);
+        IResult Publish(int? id);
+        IResult Draft(int? id);
+        IResult Remove(int? id);
 
     }
 }

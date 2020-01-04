@@ -14,5 +14,6 @@ namespace Entities
         public string CreatedBy { get; set; }
         public DateTime CreationDate { get; set; }
         public IList<Photo> Photos { get; set; }
+        public IList<Post> Posts { get; set; }
     }
 }

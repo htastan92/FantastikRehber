@@ -1,0 +1,43 @@
+﻿@model Admin.Models.PostViewModels.PostListViewModel
+
+@{
+    ViewBag.Title = "Gönderiler";
+}
+
+<p>
+    @Html.ActionLink("Yeni Gönderi", "New", "Post", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-bordered" id="dataTable">
+    <thead>
+        <tr>
+            <th>Gönderi No</th>
+            <th>Gönderi Başlığı</th>
+            <th>Durumu</th>
+            <th nowrap>Eylemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in Model.Posts)
+        {
+            <tr>
+                <td>@post.PostId</td>
+                <td>@post.Title</td>
+                <td>@post.StatusId</td>
+                <td>
+                    <a href="@Url.Action("Edit", new {id = post.PostId})" class="btn btn-success btn-sm">Düzenle</a>
+                    <a href="@Url.Action("Draft", new {id = post.PostId})" class="btn btn-warning btn-sm">Taslak</a>
+                    <a href="@Url.Action("Publish", new {id = post.PostId})" class="btn btn-info btn-sm">Yayınla</a>
+                    <a href="@Url.Action("Remove", new {id = post.PostId})" class="btn btn-danger btn-sm" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script src="@Url.Content("datatables/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("datatables/dataTables.bootstrap4.js")"></script>
+    <script src="@Url.Content("demo/datatables-demo.js")"></script>
+}

@@ -13,8 +13,8 @@ namespace Business.Abstract
         IResult Add(Photo photo);
         IResult Update(Photo photo);
         IResult Delete(Photo photo);
-        IResult Publish(int id);
-        IResult Draft(int id);
-        IResult Remove(int id);
+        IResult Publish(int? id);
+        IResult Draft(int? id);
+        IResult Remove(int? id);
     }
 }

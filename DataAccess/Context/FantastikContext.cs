@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Entities;
 
@@ -19,7 +20,12 @@ namespace DataAccess.Context
                 .HasForeignKey(pp => pp.PostId);
             builder.Entity<PostPhoto>().HasOne(pp => pp.Photo).WithMany(p => p.PostPhotos)
                 .HasForeignKey(pp => pp.PhotoId);
+            foreach (var foreignkey in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignkey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
             base.OnModelCreating(builder);
+            
         }
 
         public DbSet<Category> Categories { get; set; }

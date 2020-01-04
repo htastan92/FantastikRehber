@@ -13,6 +13,8 @@ namespace Entities
         public int StatusId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreationDate { get; set; }
+        public int CategoryId { get; set; }
+        public IList<Comment> Comments { get; set; }
         public IList<PostPhoto> PostPhotos { get; set; }
     }
 }

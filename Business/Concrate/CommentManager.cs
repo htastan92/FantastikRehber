@@ -48,19 +48,19 @@ namespace Business.Concrate
             return new SuccessResult(Messages.CommentUpdated);
         }
 
-        public IResult Publish(int id)
+        public IResult Publish(int? id)
         { 
             _commentDal.Publish(id);
             return new SuccessResult(Messages.CommentPublished);
         }
 
-        public IResult Draft(int id)
+        public IResult Draft(int? id)
         {
             _commentDal.Draft(id);
             return new SuccessResult(Messages.CommentDrafted);
         }
 
-        public IResult Remove(int id)
+        public IResult Remove(int? id)
         {
             _commentDal.Remove(id);
             return new SuccessResult(Messages.CommentRemoved);

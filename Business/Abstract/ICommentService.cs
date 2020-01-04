@@ -12,8 +12,8 @@ namespace Business.Abstract
         IDataResult<IList<Comment>> GetAllAdmin();
         IResult Add(Comment comment);
         IResult Update(Comment comment);
-        IResult Publish(int id);
-        IResult Draft(int id);
-        IResult Remove(int id);
+        IResult Publish(int? id);
+        IResult Draft(int? id);
+        IResult Remove(int? id);
     }
 }

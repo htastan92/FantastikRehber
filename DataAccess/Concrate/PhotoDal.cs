@@ -7,7 +7,7 @@ using Entities;
 namespace DataAccess.Concrate
 {
     public class PhotoDal : Repository<Photo,FantastikContext>,IPhotoDal{
-        public bool Publish(int id)
+        public bool Publish(int? id)
         {
             using var context = new FantastikContext();
             var photo = context.Photos.FirstOrDefault(c => c.PhotoId == id);
@@ -23,7 +23,7 @@ namespace DataAccess.Concrate
             }
         }
 
-        public bool Draft(int id)
+        public bool Draft(int? id)
         {
             using var context = new FantastikContext();
             var photo = context.Photos.FirstOrDefault(c => c.PhotoId == id);
@@ -39,7 +39,7 @@ namespace DataAccess.Concrate
             }
         }
 
-        public bool Remove(int id)
+        public bool Remove(int? id)
         {
             using var context = new FantastikContext();
             var photo = context.Photos.FirstOrDefault(c => c.PhotoId == id);

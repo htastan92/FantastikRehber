@@ -8,7 +8,7 @@ using Entities;
 namespace DataAccess.Concrate
 {
     public class CategoryDal : Repository<Category,FantastikContext>,ICategoryDal{
-        public bool Publish(int id)
+        public bool Publish(int? id)
         {
             using var context = new FantastikContext();
             var category = context.Categories.FirstOrDefault(c => c.CategoryId == id);
@@ -24,7 +24,7 @@ namespace DataAccess.Concrate
             }
         }
 
-        public bool Draft(int id)
+        public bool Draft(int? id)
         {
             using var context = new FantastikContext();
             var category = context.Categories.FirstOrDefault(c => c.CategoryId == id);
@@ -40,7 +40,7 @@ namespace DataAccess.Concrate
             }
         }
 
-        public bool Remove(int id)
+        public bool Remove(int? id)
         {
             using var context = new FantastikContext();
             var category = context.Categories.FirstOrDefault(c => c.CategoryId == id);

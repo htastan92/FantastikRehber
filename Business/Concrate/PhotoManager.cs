@@ -54,19 +54,19 @@ namespace Business.Concrate
             return new SuccessResult(Messages.PhotoDeleted);
         }
 
-        public IResult Publish(int id)
+        public IResult Publish(int? id)
         {
             _photoDal.Publish(id);
             return new SuccessResult(Messages.PhotoPublished);
         }
 
-        public IResult Draft(int id)
+        public IResult Draft(int? id)
         {
            _photoDal.Draft(id);
            return new SuccessResult(Messages.PhotoDrafted);
         }
 
-        public IResult Remove(int id)
+        public IResult Remove(int? id)
         {
              _photoDal.Remove(id);
             return new SuccessResult(Messages.PhotoRemoved);

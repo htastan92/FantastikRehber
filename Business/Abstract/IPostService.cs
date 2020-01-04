@@ -14,8 +14,8 @@ namespace Business.Abstract
         IDataResult<IList<Post>> GetAllAdmin();
         IResult Add(Post post);
         IResult Update(Post post);
-        IResult Publish(int id);
-        IResult Draft(int id);
-        IResult Remove(int id);
+        IResult Publish(int? id);
+        IResult Draft(int? id);
+        IResult Remove(int? id);
     }
 }

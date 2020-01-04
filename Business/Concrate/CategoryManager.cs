@@ -48,19 +48,19 @@ namespace Business.Concrate
             return new SuccessResult(Messages.CategoryUpdated);
         }
 
-        public IResult Publish(int id)
+        public IResult Publish(int? id)
         {
              _categoryDal.Publish(id);
              return new SuccessResult(Messages.CategoryPublished);
         }
 
-        public IResult Draft(int id)
+        public IResult Draft(int? id)
         {
              _categoryDal.Draft(id);
              return new SuccessResult(Messages.CategoryDrafted);
         }
 
-        public IResult Remove(int id)
+        public IResult Remove(int? id)
         {
              _categoryDal.Remove(id);
              return new SuccessResult(Messages.CategoryRemoved);
