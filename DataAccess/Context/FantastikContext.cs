@@ -1,16 +1,17 @@
 ﻿using System.Linq;
+using DataAccess.Entity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Entities;
 
 namespace DataAccess.Context
 {
-    public class FantastikContext : IdentityDbContext
+    public class FantastikContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                @"Server=;Database=FantastikDB;User Id=sa;Password=Wissen2018;");
+                @"Server=;Database=FantastikRehberDB;User Id=sa;Password=Wissen2018;");
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

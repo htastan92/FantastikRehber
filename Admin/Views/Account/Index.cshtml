@@ -1,0 +1,70 @@
+﻿@model Admin.Dtos.MemberListDto
+@{
+    ViewData["Title"] = "Üye";
+}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">@ViewBag.Title</h1>
+    <p>
+        @Html.ActionLink("Yeni Kullanıcı", "Register", "Account", null, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Yeni Rol", "NewRole", "Account", null, new { @class = "btn btn-primary" })
+    </p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Kullanıcı Tablosu</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Kullanıcı Id</th>
+                            <th>Kullanıcı Adı</th>
+                            <th>Adı</th>
+                            <th>Soyadı</th>
+                            <th>E-Posta Adresi</th>
+                            <th>Şifre</th>
+                            <th nowrap>Eylemler</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var member in Model.Members)
+                        {
+                            <tr>
+                                <td>@member.Id</td>
+                                <td>@member.UserName</td>
+                                <td>@member.FirstName</td>
+                                <td>@member.LastName</td>
+                                <td>@member.Email</td>
+                                <td>@member.Password</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", new {id = member.Id})" class="btn btn-success btn-sm">Düzenle</a>
+                                    <a href="@Url.Action("Draft", new {id = member.Id})" class="btn btn-warning btn-sm">Taslak</a>
+                                    <a href="@Url.Action("ChangePassword", new {id = member.Id})" class="btn btn-info btn-sm">Şifre Değiştir</a>
+                                    <a href="@Url.Action("Remove", new {id = member.Id})" class="btn btn-danger btn-sm" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">Sil</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <!-- Page level plugins -->
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/js/demo/datatables-demo.js"></script>
+}
+

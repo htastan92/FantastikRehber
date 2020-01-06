@@ -12,7 +12,7 @@ namespace Core.DataAccess.Concrate
 {
     public class Repository<TEntity,TContext> : IRepository<TEntity>
     where TEntity:class,IEntity,new()
-    where TContext:IdentityDbContext,new()
+    where TContext:DbContext,new()
     {
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
         {

@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using System.Reflection;
+using Autofac;
 using Business.Abstract;
 using Business.Concrate;
 using Core.DataAccess.Abstract;
@@ -7,6 +9,9 @@ using Core.Entities;
 using DataAccess.Abstract;
 using DataAccess.Concrate;
 using DataAccess.Context;
+using DataAccess.Entity;
+using Microsoft.AspNetCore.Identity;
+using Module = Autofac.Module;
 
 namespace Business.DependencyResolvers.Autofac
 {
@@ -25,6 +30,7 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<PostManager>().As<IPostService>();
             builder.RegisterType<PostDal>().As<IPostDal>();
+
         }
     }
 }
