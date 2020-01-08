@@ -6,7 +6,8 @@ using Entities;
 
 namespace DataAccess.Concrate
 {
-    public class PhotoDal : Repository<Photo,FantastikContext>,IPhotoDal{
+    public class PhotoDal : Repository<Photo,FantastikContext>,IPhotoDal
+    {
         public bool Publish(int? id)
         {
             using var context = new FantastikContext();
@@ -52,6 +53,21 @@ namespace DataAccess.Concrate
             else
             {
                 return false;
+            }
+        }
+
+        public Photo Find(string imageUrl)
+        {
+            using var context = new FantastikContext();
+            {
+                var isImageExists = context.Photos.Any(i => i.Url == imageUrl);
+                if (isImageExists)
+                    return context.Photos.FirstOrDefault(i => i.Url == imageUrl);
+
+                var newImage = new Photo { Url = imageUrl };
+                context.SaveChanges();
+
+                return newImage;
             }
         }
     }

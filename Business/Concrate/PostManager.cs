@@ -21,7 +21,7 @@ namespace Business.Concrate
             return new SuccessDataResult<Post>(_postDal.Get(p => p.Slug == slug && p.StatusId == (int) Statuses.Active));
         }
 
-        public IDataResult<Post> GetAdmin(int id)
+        public IDataResult<Post> GetAdmin(int? id)
         {
             return new SuccessDataResult<Post>(_postDal.Get(p => p.PostId == id && p.StatusId != (int)Statuses.Deleted));
         }

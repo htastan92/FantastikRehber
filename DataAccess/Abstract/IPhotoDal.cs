@@ -8,5 +8,6 @@ namespace DataAccess.Abstract
         bool Publish(int? id);
         bool Draft(int? id);
         bool Remove(int? id);
+        Photo Find(string imageUrl);
     }
 }

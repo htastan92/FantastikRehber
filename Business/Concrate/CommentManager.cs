@@ -21,7 +21,7 @@ namespace Business.Concrate
             return new SuccessDataResult<Comment>(_commentDal.Get(c => c.Slug == slug && c.StatusId == (int)Statuses.Active));
         }
 
-        public IDataResult<Comment> GetAdmin(int id)
+        public IDataResult<Comment> GetAdmin(int? id)
         {
             return new SuccessDataResult<Comment>(_commentDal.Get(c => c.CommentId == id && c.StatusId != (int)Statuses.Deleted));
         }

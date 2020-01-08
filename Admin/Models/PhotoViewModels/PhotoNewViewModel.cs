@@ -19,6 +19,5 @@ namespace Admin.Models.PhotoViewModels
         public string CreatedBy { get; set; }
         public DateTime CreationDate { get; set; }
 
-        public ICollection<PostPhoto> PostPhotos { get; set; }
     }
 }

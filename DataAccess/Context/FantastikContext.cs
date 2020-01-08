@@ -16,24 +16,31 @@ namespace DataAccess.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<PostPhoto>().HasKey(pp => new {pp.PostId, pp.PhotoId});
-            builder.Entity<PostPhoto>().HasOne(pp => pp.Post).WithMany(p => p.PostPhotos)
-                .HasForeignKey(pp => pp.PostId);
-            builder.Entity<PostPhoto>().HasOne(pp => pp.Photo).WithMany(p => p.PostPhotos)
-                .HasForeignKey(pp => pp.PhotoId);
+  
             foreach (var foreignkey in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 foreignkey.DeleteBehavior = DeleteBehavior.Restrict;
             }
             base.OnModelCreating(builder);
-            
+
+
+            builder.Entity<Status>().HasData(
+                new Status { StatusId = 1, Title = "Yayında" },
+                new Status { StatusId = 2, Title = "Taslak" },
+                new Status { StatusId = 3, Title = "Silinmiş" });
+
+
+            builder.Entity<PostType>().HasData(
+                new PostType { PostTypeId = 1, Title = "Film" },
+                new PostType { PostTypeId = 2, Title = "Dizi" });
+
         }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Photo> Photos { get; set; }
-        public DbSet<PostPhoto> PostPhotos { get; set; }
+        public DbSet<PostType> PostTypes { get; set; }
         public DbSet<Status> Statuses { get; set; }
 
     }

@@ -9,12 +9,15 @@ namespace Entities
         public int PostId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string EditorContent { get; set; }
         public string Slug { get; set; }
+        public string ImageUrl { get; set; }
         public int StatusId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreationDate { get; set; }
+        public int TypeId { get; set; }
         public int CategoryId { get; set; }
         public IList<Comment> Comments { get; set; }
-        public IList<PostPhoto> PostPhotos { get; set; }
+        public IList<Photo> Photos { get; set; }
     }
 }

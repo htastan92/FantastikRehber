@@ -14,6 +14,7 @@
         public static string PhotoPublished = "Photo is published successfully";
         public static string PhotoDrafted = "Photo is drafted successfully"; 
         public static string PhotoDeleted = "Photo is deleted successfully"; 
+        public static string PhotoFound = "Photo is founded successfully"; 
         
         public static string CommentAdded = "Comment is added successfully";
         public static string CommentUpdated = "Comment is updated successfully";

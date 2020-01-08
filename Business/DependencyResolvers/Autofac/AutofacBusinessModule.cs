@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Business.Abstract;
 using Business.Concrate;
+using Business.EmailService;
 using Core.DataAccess.Abstract;
 using Core.DataAccess.Concrate;
 using Core.Entities;
@@ -30,6 +31,11 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<PostManager>().As<IPostService>();
             builder.RegisterType<PostDal>().As<IPostDal>();
+
+            builder.RegisterType<PostTypeManager>().As<IPostTypeService>();
+            builder.RegisterType<PostTypeDal>().As<IPostTypeDal>();
+
+            builder.RegisterType<EmailSender>().As<IEmailSender>();
 
         }
     }

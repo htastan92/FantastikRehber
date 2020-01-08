@@ -1,7 +1,80 @@
-﻿
+﻿@using Business.Helper
+@model Admin.Models.CategoryViewModels.CategoryEditViewModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Kategori Düzenle";
 }
 
 <h1>@ViewBag.Title</h1>
 
+@using (Html.BeginForm("Edit", "Category", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.CategoryId)
+<div class="form-horizontal">
+
+    <div class="col-md-2">
+        @Html.DisplayNameFor(model => model.PostTypeId)
+    </div>
+    <div class="col-md-10">
+        @Html.DropDownListFor(model => model.PostTypeId, SelectListHelper.PostTypeSelectList(), htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PostTypeId, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </div>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" , id="title" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </div>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Slug)
+        </div>
+        <div class="col-md-10">
+            <input asp-for="Slug" readonly="readonly" class="form-control" id="slug" type="text" />
+            @Html.ValidationMessageFor(model => model.Slug, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Photos)
+        </div>
+        <div class="col-md-10">
+            <div class="input-group mb-3">
+                @Html.EditorFor(model => model.Photos, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            @Html.ValidationMessageFor(model => model.Photos, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.StatusId)
+        </div>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.StatusId, SelectListHelper.StatusSelectList(), htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input type="submit" value="Güncelle" class="btn btn-primary" />
+            @Html.ActionLink("Geri Dön", "Index", "Category", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+</div>
+}
+
+@section Scripts
+{
+    <script src="js/site.js"></script>
+}

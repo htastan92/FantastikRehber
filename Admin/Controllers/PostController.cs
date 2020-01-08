@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,8 @@ using Admin.Models.PostViewModels;
 using Business.Abstract;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace Admin.Controllers
 {
@@ -17,10 +20,12 @@ namespace Admin.Controllers
     public class PostController : Controller
     {
         private readonly IPostService _postService;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public PostController(IPostService postService)
+        public PostController(IPostService postService, IWebHostEnvironment hostEnvironment)
         {
             _postService = postService;
+            _hostEnvironment = hostEnvironment;
         }
 
         public IActionResult Index()
@@ -43,15 +48,37 @@ namespace Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                string uniqueFileName = null;
+                if (viewModel.Photos != null && viewModel.Photos.Count > 0)
+                {
+                    foreach (IFormFile photo in viewModel.Photos)
+                    {
+                        var extension = Path.GetExtension(photo.FileName).ToLower();
+                        if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
+                        {
+                            string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                            uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+                            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                            photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                        }
+                        else
+                        {
+                            throw new Exception("Dosya türü .JPG , .JPEG veya .PNG olmalıdır");
+                        }
+                    }
+                }
                 var post = new Post()
                 {
                     Title = viewModel.Title,
-                    StatusId = viewModel.Status.StatusId,
-                    CategoryId = viewModel.Category.CategoryId,
+                    StatusId = viewModel.StatusId,
+                    CategoryId = viewModel.CategoryId,
+                    ImageUrl = uniqueFileName,
                     CreationDate = DateTime.Now,
                     Description = viewModel.Description,
-                    CreatedBy = "Hüseyin Taştan",
-                    Slug = viewModel.Slug
+                    CreatedBy = User.Identity.Name,
+                    Slug = viewModel.Slug,
+                    TypeId = viewModel.PostTypeId,
+                    EditorContent = viewModel.EditorContent,
                 };
                 _postService.Add(post);
                 return RedirectToAction("Index");
@@ -64,10 +91,12 @@ namespace Admin.Controllers
 
         }
 
-        public IActionResult Edit(Post post)
+        public IActionResult Edit(int? id)
         {
-            if (post == null)
+            if (id == null)
                 return RedirectToAction("Index");
+
+            var post = _postService.GetAdmin(id).Data;
 
             var viewmodel = new PostEditViewModel()
             {
@@ -78,7 +107,11 @@ namespace Admin.Controllers
                 CategoryId = post.CategoryId,
                 StatusId = post.StatusId,
                 CreatedBy = post.CreatedBy,
-                CreationDate = post.CreationDate
+                CreationDate = post.CreationDate,
+                PostTypeId = post.TypeId,
+                EditorContent = post.EditorContent,
+                ImageUrl = post.ImageUrl,
+                
             };
             return View(viewmodel);
         }
@@ -91,16 +124,38 @@ namespace Admin.Controllers
             }
             else
             {
+                string uniqueFileName = null;
+                if (viewModel.Photos != null && viewModel.Photos.Count > 0)
+                {
+                    foreach (IFormFile photo in viewModel.Photos)
+                    {
+                        var extension = Path.GetExtension(photo.FileName).ToLower();
+                        if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
+                        {
+                            string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images");
+                            uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+                            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                            photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                        }
+                        else
+                        {
+                            throw new Exception("Dosya türü .JPG , .JPEG veya .PNG olmalıdır");
+                        }
+                    }
+                }
                 var post = new Post()
                 {
                     Title = viewModel.Title,
                     Description = viewModel.Description,
                     Slug = viewModel.Slug,
+                    ImageUrl = uniqueFileName,
                     CategoryId = viewModel.CategoryId,
-                    CreatedBy = viewModel.CreatedBy,
-                    CreationDate = viewModel.CreationDate,
-                    StatusId = viewModel.Status.StatusId,
-                    PostId = viewModel.PostId
+                    CreatedBy = User.Identity.Name,
+                    CreationDate = DateTime.Now,
+                    StatusId = viewModel.StatusId,
+                    PostId = viewModel.PostId,
+                    TypeId = viewModel.PostTypeId,
+                    EditorContent = viewModel.EditorContent
                 };
                 _postService.Update(post);
                 return RedirectToAction("Index");

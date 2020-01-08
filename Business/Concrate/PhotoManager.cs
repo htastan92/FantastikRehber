@@ -21,9 +21,19 @@ namespace Business.Concrate
             return new SuccessDataResult<Photo>(_photoDal.Get(p => p.Slug == slug && p.StatusId == (int)Statuses.Active));
         }
 
-        public IDataResult<Photo> GetAdmin(int id)
+        public IDataResult<Photo> GetAdmin(int? id)
         {
             return new SuccessDataResult<Photo>(_photoDal.Get(p => p.PhotoId == id && p.StatusId != (int)Statuses.Deleted));
+        }
+
+        public IDataResult<Photo> GetPhotoByPostAdmin(int? postId)
+        {
+            return new SuccessDataResult<Photo>(_photoDal.Get(p=>p.PostId==postId&&p.StatusId!=(int)Statuses.Deleted));
+        }
+
+        public IDataResult<Photo> GetPhotoByPostWeb(int? postId)
+        {
+            return new SuccessDataResult<Photo>(_photoDal.Get(p => p.PostId == postId && p.StatusId == (int)Statuses.Active));
         }
 
         public IDataResult<IList<Photo>> GetAllWeb()
@@ -34,6 +44,16 @@ namespace Business.Concrate
         public IDataResult<IList<Photo>> GetAllAdmin()
         {
             return new SuccessDataResult<IList<Photo>>(_photoDal.GetAll(p => p.StatusId != (int)Statuses.Deleted));
+        }
+
+        public IDataResult<IList<Photo>> GetPhotoByAllAdmin(int? postId)
+        {
+            return new SuccessDataResult<IList<Photo>>(_photoDal.GetAll(p=>p.PostId==postId&&p.StatusId!=(int)Statuses.Deleted));
+        }
+
+        public IDataResult<IList<Photo>> GetPhotoByAllWeb(int? postId)
+        {
+            return new SuccessDataResult<IList<Photo>>(_photoDal.GetAll(p => p.PostId == postId && p.StatusId == (int)Statuses.Active));
         }
 
         public IResult Add(Photo photo)
@@ -70,6 +90,11 @@ namespace Business.Concrate
         {
              _photoDal.Remove(id);
             return new SuccessResult(Messages.PhotoRemoved);
+        }
+
+        public IDataResult<Photo> Find(string imageUrl)
+        {
+            return new SuccessDataResult<Photo>(_photoDal.Find(imageUrl));
         }
     }
 }

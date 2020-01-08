@@ -9,7 +9,7 @@ namespace Business.Abstract
     public interface IPostService
     {
         IDataResult<Post> GetWeb(string slug);
-        IDataResult<Post> GetAdmin(int id);
+        IDataResult<Post> GetAdmin(int? id);
         IDataResult<IList<Post>> GetAllWeb();
         IDataResult<IList<Post>> GetAllAdmin();
         IResult Add(Post post);

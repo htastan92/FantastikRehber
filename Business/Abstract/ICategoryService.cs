@@ -8,7 +8,7 @@ namespace Business.Abstract
     public interface ICategoryService
     {
         IDataResult<Category> GetWeb(string slug);
-        IDataResult<Category> GetAdmin(int id);
+        IDataResult<Category> GetAdmin(int? id);
         IDataResult<IList<Category>> GetAllWeb();
         IDataResult<IList<Category>> GetAllAdmin();
         IResult Add(Category category);

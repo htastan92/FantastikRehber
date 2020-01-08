@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Business.Abstract;
 using Business.Concrate;
+using Business.EmailService;
 using DataAccess.Abstract;
 using DataAccess.Concrate;
 using DataAccess.Context;
@@ -16,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 
 namespace Admin
 {
@@ -34,12 +36,14 @@ namespace Admin
             services.AddControllersWithViews();
             services.AddDbContext<FantastikIdentityContext>(options =>
                 options.UseSqlServer("Server=;Database=FantastikRehberDB;User Id=sa;Password=Wissen2018;"));
-            services.AddIdentity<Member, MemberRole>().AddEntityFrameworkStores<FantastikIdentityContext>()
+            services.AddIdentity<Member, IdentityRole>().AddEntityFrameworkStores<FantastikIdentityContext>()
                 .AddDefaultTokenProviders();
+            services.Configure<AuthMessageSenderOptions>(Configuration);
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/Login";
                 options.LogoutPath = "/Account/Logout";
+                options.AccessDeniedPath = "/Account/AccessDenied";
             });
         }
 

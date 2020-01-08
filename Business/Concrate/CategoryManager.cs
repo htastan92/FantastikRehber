@@ -18,17 +18,17 @@ namespace Business.Concrate
 
         public IDataResult<Category> GetWeb(string slug)
         {
-            return new SuccessDataResult<Category>(_categoryDal.Get(c => c.Slug == slug && c.StatusId == (int) Statuses.Active));
+            return new SuccessDataResult<Category>(_categoryDal.Get(c => c.Slug == slug && c.StatusId == (int)Statuses.Active));
         }
 
-        public IDataResult<Category> GetAdmin(int id)
+        public IDataResult<Category> GetAdmin(int? id)
         {
             return new SuccessDataResult<Category>(_categoryDal.Get(c => c.CategoryId == id && c.StatusId != (int)Statuses.Deleted));
         }
 
         public IDataResult<IList<Category>> GetAllWeb()
         {
-            return new SuccessDataResult<IList<Category>>(_categoryDal.GetAll(c => c.StatusId == (int) Statuses.Active));
+            return new SuccessDataResult<IList<Category>>(_categoryDal.GetAll(c => c.StatusId == (int)Statuses.Active));
         }
 
         public IDataResult<IList<Category>> GetAllAdmin()
@@ -50,20 +50,20 @@ namespace Business.Concrate
 
         public IResult Publish(int? id)
         {
-             _categoryDal.Publish(id);
-             return new SuccessResult(Messages.CategoryPublished);
+            _categoryDal.Publish(id);
+            return new SuccessResult(Messages.CategoryPublished);
         }
 
         public IResult Draft(int? id)
         {
-             _categoryDal.Draft(id);
-             return new SuccessResult(Messages.CategoryDrafted);
+            _categoryDal.Draft(id);
+            return new SuccessResult(Messages.CategoryDrafted);
         }
 
         public IResult Remove(int? id)
         {
-             _categoryDal.Remove(id);
-             return new SuccessResult(Messages.CategoryRemoved);
+            _categoryDal.Remove(id);
+            return new SuccessResult(Messages.CategoryRemoved);
         }
     }
 }

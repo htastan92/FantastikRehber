@@ -11,12 +11,13 @@ namespace Entities
         public string Description { get; set; }
         public string Url { get; set; }
         public string Slug { get; set; }
+        public int PostId { get; set; }
         public int StatusId { get; set; }
         public int CategoryId { get; set; }
         public int MemberId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreationDate { get; set; }
 
-        public ICollection<PostPhoto> PostPhotos { get; set; }
+        
     }
 }

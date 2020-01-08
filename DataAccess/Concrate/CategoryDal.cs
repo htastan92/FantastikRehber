@@ -7,7 +7,8 @@ using Entities;
 
 namespace DataAccess.Concrate
 {
-    public class CategoryDal : Repository<Category,FantastikContext>,ICategoryDal{
+    public class CategoryDal : Repository<Category,FantastikContext>,ICategoryDal
+    {
         public bool Publish(int? id)
         {
             using var context = new FantastikContext();

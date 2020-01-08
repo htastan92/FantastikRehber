@@ -25,6 +25,9 @@
                         <tr>
                             <th>Gönderi No</th>
                             <th>Gönderi Başlığı</th>
+                            <th>Gönderi Açıklaması</th>
+                            <th>Ekleyen Kişi</th>
+                            <th>Eklenme Tarihi</th>
                             <th>Durumu</th>
                             <th nowrap>Eylemler</th>
                         </tr>
@@ -36,6 +39,9 @@
                             <tr>
                                 <td>@post.PostId</td>
                                 <td>@post.Title</td>
+                                <td>@post.Description</td>
+                                <td>@post.CreatedBy</td>
+                                <td>@post.CreationDate</td>
                                 @if (post.StatusId == (int)Statuses.Active)
                                 {
                                     <td>Yayında</td>
@@ -63,9 +69,9 @@
 @section Scripts
 {
     <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="/js/demo/datatables-demo.js"></script>
 }

@@ -6,7 +6,8 @@ using Entities;
 
 namespace DataAccess.Concrate
 {
-    public class PostDal:Repository<Post,FantastikContext>,IPostDal{
+    public class PostDal:Repository<Post,FantastikContext>,IPostDal
+    {
         public bool Publish(int? id)
         {
             using var context = new FantastikContext();

@@ -35,6 +35,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
@@ -109,6 +112,9 @@ namespace DataAccess.Migrations
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
@@ -124,6 +130,8 @@ namespace DataAccess.Migrations
                     b.HasKey("PhotoId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("PostId");
 
                     b.ToTable("Photos");
                 });
@@ -147,6 +155,12 @@ namespace DataAccess.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EditorContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
@@ -156,6 +170,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("PostId");
 
                     b.HasIndex("CategoryId");
@@ -163,19 +180,31 @@ namespace DataAccess.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Entities.PostPhoto", b =>
+            modelBuilder.Entity("Entities.PostType", b =>
                 {
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
+                    b.Property<int>("PostTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("PhotoId")
-                        .HasColumnType("int");
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PostId", "PhotoId");
+                    b.HasKey("PostTypeId");
 
-                    b.HasIndex("PhotoId");
+                    b.ToTable("PostTypes");
 
-                    b.ToTable("PostPhotos");
+                    b.HasData(
+                        new
+                        {
+                            PostTypeId = 1,
+                            Title = "Film"
+                        },
+                        new
+                        {
+                            PostTypeId = 2,
+                            Title = "Dizi"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Status", b =>
@@ -191,6 +220,23 @@ namespace DataAccess.Migrations
                     b.HasKey("StatusId");
 
                     b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            StatusId = 1,
+                            Title = "Yayında"
+                        },
+                        new
+                        {
+                            StatusId = 2,
+                            Title = "Taslak"
+                        },
+                        new
+                        {
+                            StatusId = 3,
+                            Title = "Silinmiş"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Comment", b =>
@@ -209,6 +255,12 @@ namespace DataAccess.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Entities.Post", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entities.Post", b =>
@@ -216,21 +268,6 @@ namespace DataAccess.Migrations
                     b.HasOne("Entities.Category", null)
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Entities.PostPhoto", b =>
-                {
-                    b.HasOne("Entities.Photo", "Photo")
-                        .WithMany("PostPhotos")
-                        .HasForeignKey("PhotoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Post", "Post")
-                        .WithMany("PostPhotos")
-                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

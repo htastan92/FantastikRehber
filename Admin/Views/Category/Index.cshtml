@@ -23,8 +23,11 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Yorum No</th>
-                            <th>Yorum Başlığı</th>
+                            <th>Kategori No</th>
+                            <th>Kategori Başlığı</th>
+                            <th>Kategori Açıklama</th>
+                            <th>Ekleyen Kişi</th>
+                            <th>Eklenme Tarihi</th>
                             <th>Durumu</th>
                             <th nowrap>Eylemler</th>
                         </tr>
@@ -36,6 +39,9 @@
                             <tr>
                                 <td>@category.CategoryId</td>
                                 <td>@category.Title</td>
+                                <td>@category.Description</td>
+                                <td>@category.CreatedBy</td>
+                                <td>@category.CreationDate</td>
                                 @if (category.StatusId == (int)Statuses.Active)
                                 {
                                     <td>Yayında</td>

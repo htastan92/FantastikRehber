@@ -7,7 +7,7 @@ namespace Business.Abstract
     public interface ICommentService
     {
         IDataResult<Comment> GetWeb(string slug);
-        IDataResult<Comment> GetAdmin(int id);
+        IDataResult<Comment> GetAdmin(int? id);
         IDataResult<IList<Comment>> GetAllWeb();
         IDataResult<IList<Comment>> GetAllAdmin();
         IResult Add(Comment comment);
