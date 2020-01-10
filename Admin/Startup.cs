@@ -38,9 +38,11 @@ namespace Admin
                 options.UseSqlServer("Server=;Database=FantastikRehberDB;User Id=sa;Password=Wissen2018;"));
             services.AddIdentity<Member, IdentityRole>().AddEntityFrameworkStores<FantastikIdentityContext>()
                 .AddDefaultTokenProviders();
+            services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(1));
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.ConfigureApplicationCookie(options =>
             {
+                
                 options.LoginPath = "/Account/Login";
                 options.LogoutPath = "/Account/Logout";
                 options.AccessDeniedPath = "/Account/AccessDenied";

@@ -10,11 +10,12 @@ using DataAccess.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Internal;
 using IdentityResult = Microsoft.AspNetCore.Identity.IdentityResult;
 
 namespace Admin.Controllers
 {
-    [Authorize(Roles = "Admin,Editör")]
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly Microsoft.AspNetCore.Identity.UserManager<Member> _userManager;
@@ -65,14 +66,14 @@ namespace Admin.Controllers
 
                 if (result.Succeeded)
                 {
-                    return Ok();
+                    await _userManager.AddToRoleAsync(member, "Standart Kullanıcı");
+                    return RedirectToAction("Login");
                 }
                 else
                 {
                     result.Errors.ToList().ForEach(a => ModelState.AddModelError("", a.Description));
+                    return Content("Bir hata oluştu lütfen tekrar deneyin");
                 }
-
-                return RedirectToAction("Login");
             }
             return View(userRegisterDto);
         }
@@ -146,8 +147,18 @@ namespace Admin.Controllers
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            await _userManager.DeleteAsync(user);
-            return RedirectToAction("Index");
+            var currentUserId = User.Identity.GetUserId();
+            if (user.Id != currentUserId)
+            {
+                await _userManager.DeleteAsync(user);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                await _userManager.DeleteAsync(user);
+                Logout();
+                return RedirectToAction("Login");
+            }
         }
         public IActionResult ChangePassword(string userId)
         {
@@ -198,10 +209,12 @@ namespace Admin.Controllers
             return View(password);
         }
         [AllowAnonymous]
+        
         public IActionResult ForgotPassword()
         {
             return View();
         }
+        
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(MemberPasswordDto passwordDto)
@@ -210,12 +223,12 @@ namespace Admin.Controllers
             if (user != null)
             {
                 var passwordCode = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { user.Id, passwordCode = passwordCode }, Request.Scheme);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, passwordCode = passwordCode }, Request.Scheme);
 
-                await _emailSender.SendEmailAsync(user.Id, "Reset Password",
-                    "Please reset your password by clicking here : <a href=\" " + callbackUrl + "\">link</a>");
+                await _emailSender.SendEmailAsync(user.Email, "Reset Password",
+                    "Please reset your password by clicking here : <a href=\" " + callbackUrl + "\">link</a>",user.FirstName,user.LastName);
                 ViewBag.callbackUrl = callbackUrl;
-                return View("ForgotPassword");
+                return View("Login");
             }
 
             return View(passwordDto);
@@ -224,9 +237,9 @@ namespace Admin.Controllers
         [AllowAnonymous]
         public IActionResult ResetPassword(string userId, string passwordCode)
         {
-            if (userId != null && passwordCode != null)
+            if (userId != null && passwordCode != null) 
             {
-                var passwordDto = new MemberPasswordDto()
+                var passwordDto = new ResetPasswordDto()
                 {
                     UserId = userId,
                     PasswordCode = passwordCode
@@ -239,7 +252,8 @@ namespace Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(MemberPasswordDto passwordDto)
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto passwordDto)
         {
             if (!ModelState.IsValid)
                 return View(passwordDto);
@@ -247,10 +261,9 @@ namespace Admin.Controllers
             if (passwordDto.NewPassword != null)
             {
                 var user = await _userManager.FindByIdAsync(passwordDto.UserId);
-                var result =
-                    await _userManager.ResetPasswordAsync(user, passwordDto.PasswordCode, passwordDto.NewPassword);
+                var result = await _userManager.ResetPasswordAsync(user, passwordDto.PasswordCode, passwordDto.NewPassword);
                 if (result.Succeeded)
-                    return Content("Şifreniz başarıyla değiştirildi");
+                    return RedirectToAction("Login");
 
             }
 
@@ -369,6 +382,4 @@ namespace Admin.Controllers
             return RedirectToAction("Login");
         }
     }
-
-    
 }
