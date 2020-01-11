@@ -33,9 +33,9 @@ namespace Business.Helper
         }
         public static SelectList PostTypeSelectList()
         {
-            IEnumerable<PostType> postTypes;
+            IEnumerable<ProductionType> postTypes;
             using FantastikContext db = new FantastikContext();
-                postTypes = db.PostTypes.ToList();
+                postTypes = db.ProductionTypes.ToList();
             
 
             SelectList postTypeSelectList = new SelectList(postTypes, "PostTypeId", "Title");

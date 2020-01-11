@@ -8,7 +8,7 @@ using Entities;
 
 namespace DataAccess.Concrate
 {
-    public class PostTypeDal : Repository<PostType,FantastikContext>,IPostTypeDal
+    public class PerformerDal : Repository<Performer,FantastikContext>,IPerformerDal
     {
     }
 }

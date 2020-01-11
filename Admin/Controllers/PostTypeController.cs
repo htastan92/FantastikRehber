@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Admin.Models.PostTypeViewModels;
+using Admin.Models.ProductionTypeViewModels;
 using Business.Abstract;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -13,18 +13,18 @@ namespace Admin.Controllers
     [Authorize]
     public class PostTypeController : Controller
     {
-        private readonly IPostTypeService _postTypeService;
+        private readonly IProductionTypeService _productionTypeService;
 
-        public PostTypeController(IPostTypeService postTypeService)
+        public PostTypeController(IProductionTypeService productionTypeService)
         {
-            _postTypeService = postTypeService;
+            _productionTypeService = productionTypeService;
         }
 
         public IActionResult Index()
         {
-            var viewModel = new PostTypeListViewModel()
+            var viewModel = new ProductionTypeListViewModel()
             {
-                PostTypes = _postTypeService.GetAll()
+                PostTypes = _productionTypeService.GetAll()
             };
             return View(viewModel);
         }
@@ -34,15 +34,15 @@ namespace Admin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult New(PostTypeNewViewModel viewModel)
+        public IActionResult New(ProductionTypeNewViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var postType = new PostType()
+                var productionType = new ProductionType()
                 {
                     Title = viewModel.Title
                 };
-                _postTypeService.Add(postType);
+                _productionTypeService.Add(productionType);
                 return RedirectToAction("Index");
             }
             else
@@ -51,30 +51,30 @@ namespace Admin.Controllers
             }
         }
 
-        public IActionResult Edit(PostType postType)
+        public IActionResult Edit(ProductionType productionType)
         {
-            if (postType == null)
+            if (productionType == null)
                 return RedirectToAction("Index");
 
-            PostTypeEditViewModel viewModel = new PostTypeEditViewModel()
+            ProductionTypeEditViewModel viewModel = new ProductionTypeEditViewModel()
             {
-                TypeId = postType.PostTypeId,
-                Title = postType.Title
+                TypeId = productionType.ProductionTypeId,
+                Title = productionType.Title
             };
             return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Edit(PostTypeEditViewModel viewModel)
+        public IActionResult Edit(ProductionTypeEditViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                var postType = new PostType()
+                var productionType = new ProductionType()
                 {
-                    PostTypeId = viewModel.TypeId,
+                    ProductionTypeId = viewModel.TypeId,
                     Title = viewModel.Title
                 };
-                _postTypeService.Update(postType);
+                _productionTypeService.Update(productionType);
                 return RedirectToAction("Index");
             }
             else
@@ -84,12 +84,12 @@ namespace Admin.Controllers
            
         }
 
-        public IActionResult Delete(PostType postType)
+        public IActionResult Delete(ProductionType productionType)
         {
-            if (postType == null)
+            if (productionType == null)
                 return RedirectToAction("Index");
 
-            _postTypeService.Delete(postType);
+            _productionTypeService.Delete(productionType);
             return RedirectToAction("Index");
         }
     }

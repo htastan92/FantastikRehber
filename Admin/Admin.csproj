@@ -23,7 +23,7 @@
     <ProjectReference Include="..\Entities\Entities.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\images\profilePictures\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\lib\ckeditor\adapters\jquery.js" />

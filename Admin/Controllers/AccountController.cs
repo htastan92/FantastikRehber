@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Admin.Dtos;
@@ -9,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using DataAccess.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Internal;
 using IdentityResult = Microsoft.AspNetCore.Identity.IdentityResult;
@@ -22,13 +26,15 @@ namespace Admin.Controllers
         private Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<Member> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<Member> userManager, Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager, SignInManager<Member> signInManager, IEmailSender emailSender)
+        public AccountController(Microsoft.AspNetCore.Identity.UserManager<Member> userManager, Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager, SignInManager<Member> signInManager, IEmailSender emailSender, IWebHostEnvironment hostEnvironment)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _hostEnvironment = hostEnvironment;
         }
 
         public IActionResult Index()
@@ -54,13 +60,32 @@ namespace Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-
+                string uniqueFileName = null;
+                if (userRegisterDto.Photos != null && userRegisterDto.Photos.Count > 0)
+                {
+                    foreach (IFormFile photo in userRegisterDto.Photos)
+                    {
+                        var extension = Path.GetExtension(photo.FileName).ToLower();
+                        if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
+                        {
+                            string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images/profilePictures");
+                            uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+                            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                            photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                        }
+                        else
+                        {
+                            throw new Exception("Dosya türü .JPG , .JPEG veya .PNG olmalıdır");
+                        }
+                    }
+                }
                 var member = new Member()
                 {
                     Email = userRegisterDto.Email,
                     UserName = userRegisterDto.UserName,
                     FirstName = userRegisterDto.FirstName,
                     LastName = userRegisterDto.LastName,
+                    ImageUrl = uniqueFileName
                 };
                 var result = await _userManager.CreateAsync(member, userRegisterDto.Password);
 

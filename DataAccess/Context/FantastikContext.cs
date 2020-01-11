@@ -30,9 +30,9 @@ namespace DataAccess.Context
                 new Status { StatusId = 3, Title = "Silinmiş" });
 
 
-            builder.Entity<PostType>().HasData(
-                new PostType { PostTypeId = 1, Title = "Film" },
-                new PostType { PostTypeId = 2, Title = "Dizi" });
+            builder.Entity<ProductionType>().HasData(
+                new ProductionType { ProductionTypeId = 1, Title = "Film" },
+                new ProductionType { ProductionTypeId = 2, Title = "Dizi" });
 
         }
 
@@ -40,8 +40,10 @@ namespace DataAccess.Context
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Photo> Photos { get; set; }
-        public DbSet<PostType> PostTypes { get; set; }
+        public DbSet<ProductionType> ProductionTypes { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<Production> Productions { get; set; }
+        public DbSet<Performer> Performers { get; set; }
 
     }
 }

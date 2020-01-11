@@ -6,7 +6,7 @@ using Entities;
 
 namespace DataAccess.Abstract
 {
-    public interface IPostTypeDal:IRepository<PostType>
+    public interface IPerformerDal : IRepository<Performer>
     {
     }
 }

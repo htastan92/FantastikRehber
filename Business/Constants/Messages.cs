@@ -6,8 +6,18 @@
         public static string PostUpdated = "Post is updated successfully";
         public static string PostRemoved = "Post is removed successfully";
         public static string PostPublished = "Post is published successfully";
-        public static string PostDrafted = "Post is drafted successfully"; 
-        
+        public static string PostDrafted = "Post is drafted successfully";
+
+        public static string ProductionAdded = "Production is added successfully";
+        public static string ProductionUpdated = "Production is updated successfully";
+        public static string ProductionRemoved = "Production is removed successfully";
+        public static string ProductionPublished = "Production is published successfully";
+        public static string ProductionDrafted = "Production is drafted successfully";
+
+        public static string PerformerAdded = "Performer is added successfully";
+        public static string PerformerUpdated = "Performer is updated successfully";
+        public static string PerformerRemoved = "Performer is removed successfully";
+
         public static string PhotoAdded = "Photo is added successfully";
         public static string PhotoUpdated = "Photo is updated successfully";
         public static string PhotoRemoved = "Photo is removed successfully";

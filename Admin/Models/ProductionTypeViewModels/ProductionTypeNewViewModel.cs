@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Admin.Models.PostTypeViewModels
+namespace Admin.Models.ProductionTypeViewModels
 {
-    public class PostTypeNewViewModel
+    public class ProductionTypeNewViewModel
     {
         public string Title { get; set; }
     }

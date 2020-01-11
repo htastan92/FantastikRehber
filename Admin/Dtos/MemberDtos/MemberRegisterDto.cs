@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Admin.Dtos.MemberDtos
 {
@@ -38,5 +39,6 @@ namespace Admin.Dtos.MemberDtos
         [MinLength(2)]
         [MaxLength(15)]
         public string LastName { get; set; }
+        public IList<IFormFile> Photos { get; set; }
     }
 }

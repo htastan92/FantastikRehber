@@ -8,37 +8,37 @@ using Entities;
 
 namespace Business.Concrate
 {
-    public class PostTypeManager : IPostTypeService
+    public class ProductionTypeManager : IProductionTypeService
     {
-        private readonly IPostTypeDal _postTypeDal;
+        private readonly IProductTypeDal _postTypeDal;
 
-        public PostTypeManager(IPostTypeDal postTypeDal)
+        public ProductionTypeManager(IProductTypeDal postTypeDal)
         {
             _postTypeDal = postTypeDal;
         }
 
-        public PostType Get(int? id)
+        public ProductionType Get(int? id)
         {
-            return _postTypeDal.Get(pt=>pt.PostTypeId==id);
+            return _postTypeDal.Get(pt=>pt.ProductionTypeId==id);
         }
 
-        public IList<PostType> GetAll()
+        public IList<ProductionType> GetAll()
         {
             return _postTypeDal.GetAll();
         }
 
-        public void Add(PostType post)
+        public void Add(ProductionType post)
         {
             _postTypeDal.Add(post);
             
         }
 
-        public void Update(PostType post)
+        public void Update(ProductionType post)
         {
             _postTypeDal.Update(post);
         }
 
-        public void Delete(PostType post)
+        public void Delete(ProductionType post)
         {
             _postTypeDal.Delete(post);
         }

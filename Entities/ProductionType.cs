@@ -5,9 +5,10 @@ using Core.Entities;
 
 namespace Entities
 {
-    public class PostType : IEntity
+    public class ProductionType : IEntity
     {
-        public int PostTypeId { get; set; }
+        public int ProductionTypeId { get; set; }
         public string Title { get; set; }
+  
     }
 }
