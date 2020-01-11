@@ -39,6 +39,7 @@ namespace Admin
             services.AddIdentity<Member, IdentityRole>().AddEntityFrameworkStores<FantastikIdentityContext>()
                 .AddDefaultTokenProviders();
             services.Configure<DataProtectionTokenProviderOptions>(o => o.TokenLifespan = TimeSpan.FromHours(1));
+            services.Configure<SecurityStampValidatorOptions>(options => { options.ValidationInterval=TimeSpan.Zero;});
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.ConfigureApplicationCookie(options =>
             {

@@ -148,9 +148,10 @@ namespace Admin.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             var currentUserId = User.Identity.GetUserId();
+            await _userManager.DeleteAsync(user);
+            await _userManager.UpdateSecurityStampAsync(user);
             if (user.Id != currentUserId)
             {
-                await _userManager.DeleteAsync(user);
                 return RedirectToAction("Index");
             }
             else
