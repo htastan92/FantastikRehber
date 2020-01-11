@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations.FantastikIdentity
 {
     [DbContext(typeof(FantastikIdentityContext))]
-    [Migration("20200108142736_Identity")]
+    [Migration("20200111200245_Identity")]
     partial class Identity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

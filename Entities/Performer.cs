@@ -14,6 +14,6 @@ namespace Entities
         public string ImageUrl { get; set; }
         public string Information { get; set; }
         public string Slug { get; set; }
-        public IList<Production> Productions { get; set; }
+        public IList<ProductionPerformer> ProductionPerformers { get; set; }
     }
 }

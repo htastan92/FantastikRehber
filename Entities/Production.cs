@@ -17,6 +17,6 @@ namespace Entities
         public int ProductionTypeId { get; set; }
         public int StatusId { get; set; }
         public IList<Category> Categories { get; set; }
-        public IList<Performer> Performers { get; set; }
+        public IList<ProductionPerformer> ProductionPerformers { get; set; }
     }
 }

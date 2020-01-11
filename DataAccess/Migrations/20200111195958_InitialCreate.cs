@@ -8,35 +8,54 @@ namespace DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Performers",
                 columns: table => new
                 {
-                    CategoryId = table.Column<int>(nullable: false)
+                    PerformerId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    Slug = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Birthdate = table.Column<DateTime>(nullable: false),
                     ImageUrl = table.Column<string>(nullable: true),
-                    StatusId = table.Column<int>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreationDate = table.Column<DateTime>(nullable: false)
+                    Information = table.Column<string>(nullable: true),
+                    Slug = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                    table.PrimaryKey("PK_Performers", x => x.PerformerId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "PostTypes",
+                name: "Productions",
                 columns: table => new
                 {
-                    PostTypeId = table.Column<int>(nullable: false)
+                    ProductionId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<int>(nullable: false),
+                    Description = table.Column<int>(nullable: false),
+                    Slug = table.Column<string>(nullable: true),
+                    ImdbScore = table.Column<double>(nullable: false),
+                    MetaCriticScore = table.Column<int>(nullable: false),
+                    ReleaseDate = table.Column<DateTime>(nullable: false),
+                    ProductionTypeId = table.Column<int>(nullable: false),
+                    StatusId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Productions", x => x.ProductionId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductionTypes",
+                columns: table => new
+                {
+                    ProductionTypeId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PostTypes", x => x.PostTypeId);
+                    table.PrimaryKey("PK_ProductionTypes", x => x.ProductionTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,6 +69,56 @@ namespace DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Statuses", x => x.StatusId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Slug = table.Column<string>(nullable: true),
+                    ImageUrl = table.Column<string>(nullable: true),
+                    StatusId = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    ProductionId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                    table.ForeignKey(
+                        name: "FK_Categories_Productions_ProductionId",
+                        column: x => x.ProductionId,
+                        principalTable: "Productions",
+                        principalColumn: "ProductionId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductionPerformer",
+                columns: table => new
+                {
+                    PerformerId = table.Column<int>(nullable: false),
+                    ProductionId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductionPerformer", x => new { x.PerformerId, x.ProductionId });
+                    table.ForeignKey(
+                        name: "FK_ProductionPerformer_Performers_PerformerId",
+                        column: x => x.PerformerId,
+                        principalTable: "Performers",
+                        principalColumn: "PerformerId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductionPerformer_Productions_ProductionId",
+                        column: x => x.ProductionId,
+                        principalTable: "Productions",
+                        principalColumn: "ProductionId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -141,8 +210,8 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "PostTypes",
-                columns: new[] { "PostTypeId", "Title" },
+                table: "ProductionTypes",
+                columns: new[] { "ProductionTypeId", "Title" },
                 values: new object[,]
                 {
                     { 1, "Film" },
@@ -158,6 +227,11 @@ namespace DataAccess.Migrations
                     { 2, "Taslak" },
                     { 3, "Silinmiş" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_ProductionId",
+                table: "Categories",
+                column: "ProductionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_PostId",
@@ -178,6 +252,11 @@ namespace DataAccess.Migrations
                 name: "IX_Posts_CategoryId",
                 table: "Posts",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductionPerformer_ProductionId",
+                table: "ProductionPerformer",
+                column: "ProductionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -189,7 +268,10 @@ namespace DataAccess.Migrations
                 name: "Photos");
 
             migrationBuilder.DropTable(
-                name: "PostTypes");
+                name: "ProductionPerformer");
+
+            migrationBuilder.DropTable(
+                name: "ProductionTypes");
 
             migrationBuilder.DropTable(
                 name: "Statuses");
@@ -198,7 +280,13 @@ namespace DataAccess.Migrations
                 name: "Posts");
 
             migrationBuilder.DropTable(
+                name: "Performers");
+
+            migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Productions");
         }
     }
 }

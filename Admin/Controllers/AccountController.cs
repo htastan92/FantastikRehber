@@ -89,16 +89,16 @@ namespace Admin.Controllers
                 };
                 var result = await _userManager.CreateAsync(member, userRegisterDto.Password);
 
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(member, "Standart Kullanıcı");
-                    return RedirectToAction("Login");
-                }
-                else
-                {
-                    result.Errors.ToList().ForEach(a => ModelState.AddModelError("", a.Description));
-                    return Content("Bir hata oluştu lütfen tekrar deneyin");
-                }
+                //if (result.Succeeded)
+                //{
+                //    await _userManager.AddToRoleAsync(member, "Standart Kullanıcı");
+                //    return RedirectToAction("Login");
+                //}
+                //else
+                //{
+                //    result.Errors.ToList().ForEach(a => ModelState.AddModelError("", a.Description));
+                //    return Content("Bir hata oluştu lütfen tekrar deneyin");
+                //}
             }
             return View(userRegisterDto);
         }
@@ -162,7 +162,7 @@ namespace Admin.Controllers
                 }
                 else
                 {
-                    result.Errors.ToList().ForEach(a=>ModelState.AddModelError("",a.Description));
+                    result.Errors.ToList().ForEach(a => ModelState.AddModelError("", a.Description));
                 }
             }
 
@@ -235,12 +235,12 @@ namespace Admin.Controllers
             return View(password);
         }
         [AllowAnonymous]
-        
+
         public IActionResult ForgotPassword()
         {
             return View();
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(MemberPasswordDto passwordDto)
@@ -252,7 +252,7 @@ namespace Admin.Controllers
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, passwordCode = passwordCode }, Request.Scheme);
 
                 await _emailSender.SendEmailAsync(user.Email, "Reset Password",
-                    "Please reset your password by clicking here : <a href=\" " + callbackUrl + "\">link</a>",user.FirstName,user.LastName);
+                    "Please reset your password by clicking here : <a href=\" " + callbackUrl + "\">link</a>", user.FirstName, user.LastName);
                 ViewBag.callbackUrl = callbackUrl;
                 return View("Login");
             }
@@ -263,7 +263,7 @@ namespace Admin.Controllers
         [AllowAnonymous]
         public IActionResult ResetPassword(string userId, string passwordCode)
         {
-            if (userId != null && passwordCode != null) 
+            if (userId != null && passwordCode != null)
             {
                 var passwordDto = new ResetPasswordDto()
                 {
@@ -302,10 +302,10 @@ namespace Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> NewRole(RoleDto roleDto,string id)
+        public async Task<IActionResult> NewRole(RoleDto roleDto, string id)
         {
             IdentityResult result = null;
-            if (id!=null)
+            if (id != null)
             {
                 var role = await _roleManager.FindByIdAsync(id);
                 role.Name = roleDto.Name;
@@ -313,7 +313,7 @@ namespace Admin.Controllers
             }
             else
             {
-                 result = await _roleManager.CreateAsync(new IdentityRole{Name = roleDto.Name});
+                result = await _roleManager.CreateAsync(new IdentityRole { Name = roleDto.Name });
             }
 
             if (result.Succeeded)

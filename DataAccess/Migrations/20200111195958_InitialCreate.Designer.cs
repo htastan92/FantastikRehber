@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(FantastikContext))]
-    [Migration("20200108142707_InitialCreate")]
+    [Migration("20200111195958_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,9 @@ namespace DataAccess.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ProductionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
@@ -50,6 +53,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoryId");
+
+                    b.HasIndex("ProductionId");
 
                     b.ToTable("Categories");
                 });
@@ -90,6 +95,36 @@ namespace DataAccess.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Entities.Performer", b =>
+                {
+                    b.Property<int>("PerformerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Birthdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Information")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PerformerId");
+
+                    b.ToTable("Performers");
                 });
 
             modelBuilder.Entity("Entities.Photo", b =>
@@ -182,9 +217,60 @@ namespace DataAccess.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("Entities.PostType", b =>
+            modelBuilder.Entity("Entities.Production", b =>
                 {
-                    b.Property<int>("PostTypeId")
+                    b.Property<int>("ProductionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Description")
+                        .HasColumnType("int");
+
+                    b.Property<double>("ImdbScore")
+                        .HasColumnType("float");
+
+                    b.Property<int>("MetaCriticScore")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductionTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Title")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductionId");
+
+                    b.ToTable("Productions");
+                });
+
+            modelBuilder.Entity("Entities.ProductionPerformer", b =>
+                {
+                    b.Property<int>("PerformerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PerformerId", "ProductionId");
+
+                    b.HasIndex("ProductionId");
+
+                    b.ToTable("ProductionPerformer");
+                });
+
+            modelBuilder.Entity("Entities.ProductionType", b =>
+                {
+                    b.Property<int>("ProductionTypeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -192,19 +278,19 @@ namespace DataAccess.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PostTypeId");
+                    b.HasKey("ProductionTypeId");
 
-                    b.ToTable("PostTypes");
+                    b.ToTable("ProductionTypes");
 
                     b.HasData(
                         new
                         {
-                            PostTypeId = 1,
+                            ProductionTypeId = 1,
                             Title = "Film"
                         },
                         new
                         {
-                            PostTypeId = 2,
+                            ProductionTypeId = 2,
                             Title = "Dizi"
                         });
                 });
@@ -241,6 +327,14 @@ namespace DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Entities.Category", b =>
+                {
+                    b.HasOne("Entities.Production", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("ProductionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("Entities.Comment", b =>
                 {
                     b.HasOne("Entities.Post", null)
@@ -270,6 +364,21 @@ namespace DataAccess.Migrations
                     b.HasOne("Entities.Category", null)
                         .WithMany("Posts")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.ProductionPerformer", b =>
+                {
+                    b.HasOne("Entities.Performer", "Performer")
+                        .WithMany("ProductionPerformers")
+                        .HasForeignKey("PerformerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Production", "Production")
+                        .WithMany("ProductionPerformers")
+                        .HasForeignKey("ProductionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

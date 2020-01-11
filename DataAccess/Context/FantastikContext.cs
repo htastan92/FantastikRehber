@@ -16,7 +16,17 @@ namespace DataAccess.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-  
+
+            builder.Entity<ProductionPerformer>()
+                .HasKey(bc => new { bc.PerformerId, bc.ProductionId });
+            builder.Entity<ProductionPerformer>()
+                .HasOne(bc => bc.Performer)
+                .WithMany(b => b.ProductionPerformers)
+                .HasForeignKey(bc => bc.PerformerId);
+            builder.Entity<ProductionPerformer>()
+                .HasOne(bc => bc.Production)
+                .WithMany(c => c.ProductionPerformers)
+                .HasForeignKey(bc => bc.ProductionId);
             foreach (var foreignkey in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 foreignkey.DeleteBehavior = DeleteBehavior.Restrict;
