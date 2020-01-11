@@ -88,17 +88,20 @@ namespace Admin.Controllers
                     ImageUrl = uniqueFileName
                 };
                 var result = await _userManager.CreateAsync(member, userRegisterDto.Password);
+                if (User.Identity != null )
+                {
+                    if (result.Succeeded)
+                    {
+                        await _userManager.AddToRoleAsync(member, "Standart Kullanıcı");
+                        return RedirectToAction("Login");
+                    }
+                    else
+                    {
+                        result.Errors.ToList().ForEach(a => ModelState.AddModelError("", a.Description));
+                        return Content("Bir hata oluştu lütfen tekrar deneyin");
+                    }
+                }
 
-                //if (result.Succeeded)
-                //{
-                //    await _userManager.AddToRoleAsync(member, "Standart Kullanıcı");
-                //    return RedirectToAction("Login");
-                //}
-                //else
-                //{
-                //    result.Errors.ToList().ForEach(a => ModelState.AddModelError("", a.Description));
-                //    return Content("Bir hata oluştu lütfen tekrar deneyin");
-                //}
             }
             return View(userRegisterDto);
         }
