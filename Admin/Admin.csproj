@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\images\PerformerImages\" />
     <Folder Include="wwwroot\images\ProductionImages\" />
-    <Folder Include="wwwroot\images\ProfilePictures\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\lib\ckeditor\adapters\jquery.js" />

@@ -9,6 +9,8 @@
 @using (Html.BeginForm("Edit", "Production", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.HiddenFor(model => model.ProductionId)
+    @Html.HiddenFor(model=>model.CreatedBy)
+    @Html.HiddenFor(model=>model.CreationDate)
 <div class="form-horizontal">
     <div class="form-group">
         <div class="col-md-2">
@@ -124,7 +126,7 @@
             @Html.DisplayNameFor(model => model.ReleaseDate)
         </div>
         <div class="col-md-10">
-            <input type="text" class="form-control" id="ReleaseDate">
+            <input id="releaseDate" asp-for="ReleaseDate" type="text" class="form-control">
             @Html.ValidationMessageFor(model => model.ReleaseDate, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -144,12 +146,22 @@
         </div>
     </div>
 </div>
+
 }
+
 @section Scripts
 {
     <script src="/js/site.js"></script>
     <script src="~/js/chosen/chosen.jquery.min.js"></script>
-    <script src="~/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $("#releaseDate").datepicker({
+            dateFormat: "d/m/yy"
+        });
+    </script>
+    <script>
+        $("form :input").attr("autocomplete", "off");
+    </script>
     <script>
         $(function () {
             $("#Categories").chosen();
@@ -160,13 +172,5 @@
             $("#Performers").chosen();
         });
     </script>
-    <script>
-        $("#ReleaseDate").datetimepicker({
-            format: 'dd-mm-yyyy hh:ii',
-            autoclose: true
-        });
-    </script>
-    <script>
-        $("form :input").attr("autocomplete", "off");
-    </script>
+  
 }
