@@ -4,6 +4,7 @@ using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
+using Entities.Enums;
 
 namespace Business.Concrate
 {
@@ -36,6 +37,15 @@ namespace Business.Concrate
             return new SuccessDataResult<IList<Category>>(_categoryDal.GetAll(c => c.StatusId != (int)Statuses.Deleted));
         }
 
+        public IDataResult<IList<Category>> GetAllByPostId(int? id)
+        {
+            return new SuccessDataResult<IList<Category>>(_categoryDal.GetAllByPostId(id));
+        }
+
+        public IDataResult<IList<Category>> GetAllByProductionId(int? productionId)
+        {
+            return new SuccessDataResult<IList<Category>>(_categoryDal.GetAllByProductionId(productionId));
+        }
         public IResult Add(Category category)
         {
             _categoryDal.Add(category);

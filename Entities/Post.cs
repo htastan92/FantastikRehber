@@ -15,9 +15,11 @@ namespace Entities
         public int StatusId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreationDate { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public int TypeId { get; set; }
-        public int CategoryId { get; set; }
         public IList<Comment> Comments { get; set; }
         public IList<Photo> Photos { get; set; }
+        public IList<PostCategory> PostCategories { get; set; }
     }
 }

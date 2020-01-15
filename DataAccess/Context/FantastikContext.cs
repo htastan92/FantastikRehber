@@ -27,6 +27,29 @@ namespace DataAccess.Context
                 .HasOne(bc => bc.Production)
                 .WithMany(c => c.ProductionPerformers)
                 .HasForeignKey(bc => bc.ProductionId);
+
+            builder.Entity<ProductionCategory>()
+                .HasKey(bc => new { bc.ProductionId, bc.CategoryId });
+            builder.Entity<ProductionCategory>()
+                .HasOne(bc => bc.Production)
+                .WithMany(b => b.ProductionCategories)
+                .HasForeignKey(bc => bc.ProductionId);
+            builder.Entity<ProductionCategory>()
+                .HasOne(bc => bc.Category)
+                .WithMany(c => c.ProductionCategories)
+                .HasForeignKey(bc => bc.CategoryId);
+
+            builder.Entity<PostCategory>()
+                .HasKey(bc => new { bc.PostId, bc.CategoryId });
+            builder.Entity<PostCategory>()
+                .HasOne(bc => bc.Post)
+                .WithMany(b => b.PostCategories)
+                .HasForeignKey(bc => bc.PostId);
+            builder.Entity<PostCategory>()
+                .HasOne(bc => bc.Category)
+                .WithMany(c => c.PostCategories)
+                .HasForeignKey(bc => bc.CategoryId);
+
             foreach (var foreignkey in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 foreignkey.DeleteBehavior = DeleteBehavior.Restrict;

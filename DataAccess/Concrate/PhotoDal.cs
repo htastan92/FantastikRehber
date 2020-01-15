@@ -3,6 +3,7 @@ using Core.DataAccess.Concrate;
 using DataAccess.Abstract;
 using DataAccess.Context;
 using Entities;
+using Entities.Enums;
 
 namespace DataAccess.Concrate
 {

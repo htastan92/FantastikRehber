@@ -1,0 +1,67 @@
+﻿@using Entities.Enums
+@model Admin.Models.PerformerViewModels.PerformerListViewModel
+@{
+    ViewBag.Title = "Oyuncular";
+}
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">@ViewBag.Title</h1>
+        <p>
+            @Html.ActionLink("Yeni Oyuncu", "New", "Performer", null, new { @class = "btn btn-primary" })
+        </p>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Kategori Tablosu</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Oyuncu No</th>
+                                <th>Oyuncu  Adı</th>
+                                <th>Oyuncu Soyadı</th>
+                                <th>Doğum Tarihi</th>
+                                <th>Ekleyen Kişi</th>
+                                <th>Eklenme Tarihi</th>
+                                <th nowrap>Eylemler</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var category in Model.Performers)
+                            {
+                                <tr>
+                                    <td>@category.PerformerId</td>
+                                    <td>@category.FirstName</td>
+                                    <td>@category.LastName</td>
+                                    <td>@category.Birthdate</td>
+                                    <td>@category.CreatedBy</td>
+                                    <td>@category.CreationDate</td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", new {id = category.PerformerId})" class="btn btn-success btn-sm">Düzenle</a>
+                                        <a href="@Url.Action("Delete", new {id = category.PerformerId})" class="btn btn-danger btn-sm" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">Sil</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+@section Scripts
+{
+    <!-- Page level plugins -->
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/js/demo/datatables-demo.js"></script>
+}

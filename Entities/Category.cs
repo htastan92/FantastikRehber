@@ -14,7 +14,10 @@ namespace Entities
         public int StatusId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreationDate { get; set; }
+        public string UpdatedBy { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public IList<ProductionCategory> ProductionCategories { get; set; }
         public IList<Photo> Photos { get; set; }
-        public IList<Post> Posts { get; set; }
+        public IList<PostCategory> PostCategories { get; set; }
     }
 }

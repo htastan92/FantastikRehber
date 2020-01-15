@@ -1,0 +1,87 @@
+﻿@using Business.Enums
+@using Entities.Enums
+@model Admin.Models.ProductionViewModels.ProductionListViewModel
+@{
+    ViewBag.Title = "Yapımlar";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">@ViewBag.Title</h1>
+    <p>
+        @Html.ActionLink("Yeni Yapım", "New", "Production", null, new { @class = "btn btn-primary" })
+    </p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Yapım Tablosu</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Yapım No</th>
+                            <th>Yapım Başlığı</th>
+                            <th>Imdb Puanı</th>
+                            <th>MetaCritic Puanı</th>
+                            <th>Ekleyen Kişi</th>
+                            <th>Eklenme Tarihi</th>
+                            <th>Güncelleyen Kişi</th>
+                            <th>Güncellenme Tarihi</th>
+                            <th>Durumu</th>
+                            <th nowrap>Eylemler</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var production in Model.Productions)
+                        {
+                            <tr>
+                                <td>@production.ProductionId</td>
+                                <td>@production.Title</td>
+                                <td>@production.ImdbScore</td>
+                                <td>@production.MetaCriticScore</td>
+                                <td>@production.CreatedBy</td>
+                                <td>@production.CreationDate</td>
+                                <td>@production.UpdatedBy</td>
+                                <td>@production.UpdatedAt</td>
+
+                                @if (production.StatusId == (int)Statuses.Active)
+                                {
+                                    <td>Yayında</td>
+                                }
+                                else if (production.StatusId == (int)Statuses.Passive)
+                                {
+                                    <td>Taslak</td>
+                                }
+                                <td>
+                                    <a href="@Url.Action("Edit", new {id = production.ProductionId})" class="btn btn-success btn-sm">Düzenle</a>
+                                    <a href="@Url.Action("Draft", new {id = production.ProductionId})" class="btn btn-warning btn-sm">Taslak</a>
+                                    <a href="@Url.Action("Publish", new {id = production.ProductionId})" class="btn btn-info btn-sm">Yayınla</a>
+                                    <a href="@Url.Action("Remove", new {id = production.ProductionId})" class="btn btn-danger btn-sm" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">Sil</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <!-- Page level plugins -->
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/js/demo/datatables-demo.js"></script>
+}
+

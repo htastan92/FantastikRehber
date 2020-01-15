@@ -4,6 +4,7 @@ using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
+using Entities.Enums;
 
 namespace Business.Concrate
 {
@@ -21,9 +22,19 @@ namespace Business.Concrate
             return new SuccessDataResult<Post>(_postDal.Get(p => p.Slug == slug && p.StatusId == (int) Statuses.Active));
         }
 
+        public IDataResult<Post> GetWebByCategory(string slug,int? categoryId)
+        {
+            return new SuccessDataResult<Post>(_postDal.GetPostByCategoryWeb(slug,categoryId));
+        }
+
         public IDataResult<Post> GetAdmin(int? id)
         {
             return new SuccessDataResult<Post>(_postDal.Get(p => p.PostId == id && p.StatusId != (int)Statuses.Deleted));
+        }
+
+        public IDataResult<Post> GetAdminByCategory(string slug , int? categoryId)
+        {
+            return new SuccessDataResult<Post>(_postDal.GetPostByCategoryAdmin(slug,categoryId));
         }
 
         public IDataResult<IList<Post>> GetAllWeb()
@@ -31,9 +42,19 @@ namespace Business.Concrate
             return new SuccessDataResult<IList<Post>>(_postDal.GetAll(p => p.StatusId == (int) Statuses.Active));
         }
 
+        public IDataResult<IList<Post>> GetAllWebByCategory(int? categoryId)
+        {
+            return new SuccessDataResult<IList<Post>>(_postDal.GetAllPostsByCategoryWeb(categoryId));
+        }
+
         public IDataResult<IList<Post>> GetAllAdmin()
         {
             return new SuccessDataResult<IList<Post>>(_postDal.GetAll(p => p.StatusId != (int)Statuses.Deleted));
+        }
+
+        public IDataResult<IList<Post>> GetAllAdminByCategory(int? categoryId)
+        {
+            return new SuccessDataResult<IList<Post>>(_postDal.GetAllPostsByCategoryAdmin(categoryId));
         }
 
         public IResult Add(Post post)

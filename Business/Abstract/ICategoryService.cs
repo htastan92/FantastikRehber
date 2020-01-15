@@ -11,6 +11,8 @@ namespace Business.Abstract
         IDataResult<Category> GetAdmin(int? id);
         IDataResult<IList<Category>> GetAllWeb();
         IDataResult<IList<Category>> GetAllAdmin();
+        IDataResult<IList<Category>> GetAllByPostId(int? categoryId);
+        IDataResult<IList<Category>> GetAllByProductionId(int? productionId);
         IResult Add(Category category);
         IResult Update(Category category);
         IResult Publish(int? id);

@@ -8,5 +8,6 @@ namespace DataAccess.Abstract
 {
     public interface IPerformerDal : IRepository<Performer>
     {
+        IList<Performer> GetAllByProductionId(int? productionId);
     }
 }

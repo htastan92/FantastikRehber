@@ -1,4 +1,4 @@
-﻿@using Business.Enums
+﻿@using Entities.Enums
 @model Admin.Models.PostViewModels.PostListViewModel
 
 @{
@@ -25,14 +25,14 @@
                         <tr>
                             <th>Gönderi No</th>
                             <th>Gönderi Başlığı</th>
-                            <th>Gönderi Açıklaması</th>
+                            <th>Gönderi Açıklama</th>
                             <th>Ekleyen Kişi</th>
                             <th>Eklenme Tarihi</th>
                             <th>Durumu</th>
                             <th nowrap>Eylemler</th>
                         </tr>
                     </thead>
-            
+
                     <tbody>
                         @foreach (var post in Model.Posts)
                         {

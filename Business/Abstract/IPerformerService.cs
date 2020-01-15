@@ -10,6 +10,7 @@ namespace Business.Abstract
     {
         IDataResult<Performer> Get(int? id);
         IDataResult<IList<Performer>> GetAll();
+        IDataResult<IList<Performer>> GetAllByProductionId(int? productionId);
         IResult Add(Performer performer);
         IResult Update(Performer performer);
         IResult Delete(Performer performer);

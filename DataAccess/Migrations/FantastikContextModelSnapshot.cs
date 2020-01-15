@@ -38,9 +38,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
@@ -50,9 +47,13 @@ namespace DataAccess.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CategoryId");
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("ProductionId");
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -105,6 +106,12 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -118,6 +125,12 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PerformerId");
@@ -150,6 +163,9 @@ namespace DataAccess.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ProductionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
@@ -168,6 +184,8 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PostId");
 
+                    b.HasIndex("ProductionId");
+
                     b.ToTable("Photos");
                 });
 
@@ -177,9 +195,6 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -208,11 +223,30 @@ namespace DataAccess.Migrations
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("PostId");
+
+                    b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Entities.PostCategory", b =>
+                {
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PostId", "CategoryId");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("PostCategory");
                 });
 
             modelBuilder.Entity("Entities.Production", b =>
@@ -222,8 +256,17 @@ namespace DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Description")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("ImdbScore")
                         .HasColumnType("float");
@@ -243,12 +286,33 @@ namespace DataAccess.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Title")
-                        .HasColumnType("int");
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductionId");
 
                     b.ToTable("Productions");
+                });
+
+            modelBuilder.Entity("Entities.ProductionCategory", b =>
+                {
+                    b.Property<int>("ProductionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductionId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("ProductionCategory");
                 });
 
             modelBuilder.Entity("Entities.ProductionPerformer", b =>
@@ -325,14 +389,6 @@ namespace DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Entities.Category", b =>
-                {
-                    b.HasOne("Entities.Production", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("ProductionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("Entities.Comment", b =>
                 {
                     b.HasOne("Entities.Post", null)
@@ -355,13 +411,39 @@ namespace DataAccess.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Entities.Production", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("ProductionId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Entities.Post", b =>
+            modelBuilder.Entity("Entities.PostCategory", b =>
                 {
-                    b.HasOne("Entities.Category", null)
-                        .WithMany("Posts")
+                    b.HasOne("Entities.Category", "Category")
+                        .WithMany("PostCategories")
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Post", "Post")
+                        .WithMany("PostCategories")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Entities.ProductionCategory", b =>
+                {
+                    b.HasOne("Entities.Category", "Category")
+                        .WithMany("ProductionCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Production", "Production")
+                        .WithMany("ProductionCategories")
+                        .HasForeignKey("ProductionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

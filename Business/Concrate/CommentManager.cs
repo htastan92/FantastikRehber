@@ -4,6 +4,7 @@ using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities;
+using Entities.Enums;
 
 namespace Business.Concrate
 {

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Core.Entities;
 
 namespace Entities
 {
-    public class ProductionPerformer
+    public class ProductionPerformer : IEntity
     {
         public int PerformerId { get; set; }
         public Performer Performer { get; set; }

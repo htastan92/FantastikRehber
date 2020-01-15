@@ -41,6 +41,15 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<PerformerManager>().As<IPerformerService>();
             builder.RegisterType<PerformerDal>().As<IPerformerDal>();
 
+            builder.RegisterType<PostCategoryManager>().As<IPostCategoryService>();
+            builder.RegisterType<PostCategoryDal>().As<IPostCategoryDal>();
+
+            builder.RegisterType<ProductionCategoryManager>().As<IProductionCategoryService>();
+            builder.RegisterType<ProductionCategoryDal>().As<IProductionCategoryDal>();
+
+            builder.RegisterType<ProductionPerformerManager>().As<IProductionPerformerService>();
+            builder.RegisterType<ProductionPerformerDal>().As<IProductionPerformerDal>();
+
             builder.RegisterType<EmailSender>().As<IEmailSender>();
 
         }

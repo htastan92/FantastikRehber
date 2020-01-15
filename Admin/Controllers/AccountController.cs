@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Admin.Dtos;
 using Admin.Dtos.MemberDtos;
@@ -23,7 +24,7 @@ namespace Admin.Controllers
     public class AccountController : Controller
     {
         private readonly Microsoft.AspNetCore.Identity.UserManager<Member> _userManager;
-        private Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> _roleManager;
+        private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<Member> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly IWebHostEnvironment _hostEnvironment;
@@ -39,10 +40,14 @@ namespace Admin.Controllers
 
         public IActionResult Index()
         {
+            var id = User.Identity.GetUserId();
+            var user = _userManager.FindByIdAsync(id);
+            var imageUrl = user.Result.ImageUrl;
             var accountPage = new MemberListDto()
             {
                 Members = _userManager.Users.ToList(),
-                Roles = _roleManager.Roles.ToList()
+                Roles = _roleManager.Roles.ToList(),
+                ImageUrl =imageUrl
             };
             return View(accountPage);
         }
@@ -68,7 +73,7 @@ namespace Admin.Controllers
                         var extension = Path.GetExtension(photo.FileName).ToLower();
                         if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
                         {
-                            string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images/profilePictures");
+                            string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "images/ProfilePictures");
                             uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
                             string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                             photo.CopyTo(new FileStream(filePath, FileMode.Create));
@@ -92,7 +97,7 @@ namespace Admin.Controllers
                 {
                     if (result.Succeeded)
                     {
-                        await _userManager.AddToRoleAsync(member, "Standart Kullanıcı");
+                        //await _userManager.AddToRoleAsync(member, "Standart Kullanıcı");
                         return RedirectToAction("Login");
                     }
                     else
@@ -403,6 +408,7 @@ namespace Admin.Controllers
         {
             return View();
         }
+
 
         [AllowAnonymous]
         public IActionResult Logout()

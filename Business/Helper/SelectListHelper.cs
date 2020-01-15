@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccess.Context;
+using Entities.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business.Helper
@@ -26,19 +27,29 @@ namespace Business.Helper
         {
             IEnumerable<Category> categories;
             using FantastikContext db = new FantastikContext();
-                categories = db.Categories.Where(c => c.StatusId != (int)Statuses.Deleted).ToList();
+            categories = db.Categories.Where(c => c.StatusId != (int)Statuses.Deleted).ToList();
 
-            SelectList newsCategoryList = new SelectList(categories, "CategoryId", "Title");
+            SelectList newsCategoryList = new SelectList(categories, "CategoryId", "Title",true);
             return newsCategoryList;
         }
-        public static SelectList PostTypeSelectList()
+
+        public static SelectList PerformerSelectList()
+        {
+            IEnumerable<Performer> performers;
+            using FantastikContext db = new FantastikContext();
+            performers = db.Performers.ToList();
+
+            SelectList newPerformerList = new SelectList(performers, "PerformerId", "FullName");
+            return newPerformerList;
+        }
+        public static SelectList ProductionTypeSelectList()
         {
             IEnumerable<ProductionType> postTypes;
             using FantastikContext db = new FantastikContext();
                 postTypes = db.ProductionTypes.ToList();
             
 
-            SelectList postTypeSelectList = new SelectList(postTypes, "PostTypeId", "Title");
+            SelectList postTypeSelectList = new SelectList(postTypes, "ProductionTypeId", "Title");
             return postTypeSelectList;
         }
 

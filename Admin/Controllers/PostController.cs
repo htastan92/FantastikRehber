@@ -9,10 +9,12 @@ using Microsoft.Extensions.Logging;
 using Admin.Models;
 using Admin.Models.PostViewModels;
 using Business.Abstract;
+using Business.Helper;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Admin.Controllers
 {
@@ -21,11 +23,16 @@ namespace Admin.Controllers
     {
         private readonly IPostService _postService;
         private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly IPostCategoryService _postCategoryService;
+        private readonly ICategoryService _categoryService;
+    
 
-        public PostController(IPostService postService, IWebHostEnvironment hostEnvironment)
+        public PostController(IPostService postService, IWebHostEnvironment hostEnvironment, IPostCategoryService postCategoryService, ICategoryService categoryService)
         {
             _postService = postService;
             _hostEnvironment = hostEnvironment;
+            _postCategoryService = postCategoryService;
+            _categoryService = categoryService;
         }
 
         public IActionResult Index()
@@ -40,12 +47,17 @@ namespace Admin.Controllers
         [HttpGet]
         public IActionResult New()
         {
-            return View();
+            var viewModel = new PostNewViewModel()
+            {
+                Categories = _categoryService.GetAllAdmin().Data
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult New(PostNewViewModel viewModel)
+        public IActionResult New(PostNewViewModel viewModel, string[] categories)
         {
+
             if (ModelState.IsValid)
             {
                 string uniqueFileName = null;
@@ -71,16 +83,25 @@ namespace Admin.Controllers
                 {
                     Title = viewModel.Title,
                     StatusId = viewModel.StatusId,
-                    CategoryId = viewModel.CategoryId,
                     ImageUrl = uniqueFileName,
                     CreationDate = DateTime.Now,
                     Description = viewModel.Description,
                     CreatedBy = User.Identity.Name,
                     Slug = viewModel.Slug,
-                    TypeId = viewModel.PostTypeId,
+                    TypeId = viewModel.ProductionTypeId,
                     EditorContent = viewModel.EditorContent,
                 };
                 _postService.Add(post);
+
+                foreach (var categoryId in categories)
+                {
+                    var postCategory = new PostCategory()
+                    {
+                        CategoryId = Convert.ToInt32(categoryId),
+                        PostId = post.PostId
+                    };
+                    _postCategoryService.Add(postCategory);
+                }
                 return RedirectToAction("Index");
             }
             else
@@ -97,26 +118,29 @@ namespace Admin.Controllers
                 return RedirectToAction("Index");
 
             var post = _postService.GetAdmin(id).Data;
-
+            var selectedCategories = _categoryService.GetAllByPostId(post.PostId).Data;
+            var categories = _categoryService.GetAllAdmin().Data;
             var viewmodel = new PostEditViewModel()
             {
                 PostId = post.PostId,
                 Title = post.Title,
                 Description = post.Description,
                 Slug = post.Slug,
-                CategoryId = post.CategoryId,
                 StatusId = post.StatusId,
+                Categories = categories,
+                SelectedCategories = selectedCategories,
                 CreatedBy = post.CreatedBy,
                 CreationDate = post.CreationDate,
-                PostTypeId = post.TypeId,
+                ProductionTypeId = post.TypeId,
                 EditorContent = post.EditorContent,
                 ImageUrl = post.ImageUrl,
                 
             };
+            
             return View(viewmodel);
         }
         [HttpPost]
-        public IActionResult Edit(PostEditViewModel viewModel)
+        public IActionResult Edit(PostEditViewModel viewModel,string[] categories)
         {
             if (!ModelState.IsValid)
             {
@@ -149,15 +173,29 @@ namespace Admin.Controllers
                     Description = viewModel.Description,
                     Slug = viewModel.Slug,
                     ImageUrl = uniqueFileName,
-                    CategoryId = viewModel.CategoryId,
                     CreatedBy = User.Identity.Name,
                     CreationDate = DateTime.Now,
                     StatusId = viewModel.StatusId,
                     PostId = viewModel.PostId,
-                    TypeId = viewModel.PostTypeId,
+                    TypeId = viewModel.ProductionTypeId,
                     EditorContent = viewModel.EditorContent
                 };
+
                 _postService.Update(post);
+                var oldCategories = _postCategoryService.GetAllByPostId(post.PostId);
+                foreach (var category in oldCategories)
+                {
+                    _postCategoryService.Delete(category);
+                }
+                foreach (var categoryId in categories)
+                {
+                    var postCategory = new PostCategory()
+                    {
+                        PostId = viewModel.PostId,
+                        CategoryId = Convert.ToInt32(categoryId)
+                    };
+                    _postCategoryService.Add(postCategory);
+                }
                 return RedirectToAction("Index");
             }
 
@@ -189,7 +227,5 @@ namespace Admin.Controllers
             _postService.Remove(id);
             return RedirectToAction("Index");
         }
-
-
     }
 }

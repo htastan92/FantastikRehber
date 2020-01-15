@@ -1,0 +1,172 @@
+﻿@using Business.Helper
+@model Admin.Models.ProductionViewModels.ProductionEditViewModel
+@{
+    ViewBag.Title = "Yapım Düzenle";
+}
+
+<h1>@ViewBag.Title</h1>
+
+@using (Html.BeginForm("Edit", "Production", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(model => model.ProductionId)
+<div class="form-horizontal">
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.ProductionTypeId)
+        </div>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.ProductionTypeId, SelectListHelper.ProductionTypeSelectList(), htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ProductionTypeId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Categories)
+        </div>
+        <div class="col-md-10">
+            <select asp-for="Categories" data-placeholder="Kategori Seçin" multiple class="form-control" id="Categories">
+                <option value=""></option>
+                @foreach (var category in Model.Categories)
+                {
+                    if (Model.SelectedCategories.FirstOrDefault(c => c.CategoryId == category.CategoryId) != null)
+                    {
+                        <option selected value="@category.CategoryId">@category.Title</option>
+                    }
+                    else
+                    {
+                        <option value="@category.CategoryId">@category.Title</option>
+                    }
+                }
+            </select>
+            @Html.ValidationMessageFor(model => model.Categories, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Performers)
+        </div>
+        <div class="col-md-10">
+            <select asp-for="Performers" data-placeholder="Oyuncu Seçin" multiple class="form-control" id="Performers">
+                <option value=""></option>
+                @foreach (var performer in Model.Performers)
+                {
+                    if (Model.SelectedPerformers.FirstOrDefault(c => c.PerformerId == performer.PerformerId) != null)
+                    {
+                        <option selected value="@performer.PerformerId">@performer.FullName</option>
+                    }
+                    else
+                    {
+                        <option value="@performer.PerformerId">@performer.FullName</option>
+                    }
+                }
+            </select>
+            @Html.ValidationMessageFor(model => model.Performers, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </div>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", id = "title" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </div>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.ImdbScore)
+        </div>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.ImdbScore, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ImdbScore, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.MetaCriticScore)
+        </div>
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.MetaCriticScore, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.MetaCriticScore, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Slug)
+        </div>
+        <div class="col-md-10">
+            <input asp-for="Slug" readonly="readonly" class="form-control" id="slug" type="text" />
+            @Html.ValidationMessageFor(model => model.Slug, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.Photos)
+        </div>
+        <div class="col-md-10">
+            <div class="input-group mb-3">
+                @Html.EditorFor(model => model.Photos, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+            @Html.ValidationMessageFor(model => model.Photos, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </div>
+        <div class="col-md-10">
+            <input type="text" class="form-control" id="ReleaseDate">
+            @Html.ValidationMessageFor(model => model.ReleaseDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2">
+            @Html.DisplayNameFor(model => model.StatusId)
+        </div>
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.StatusId, SelectListHelper.StatusSelectList(), htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input type="submit" value="Oluştur" class="btn btn-primary" />
+            @Html.ActionLink("Geri Dön", "Index", "Category", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+</div>
+}
+@section Scripts
+{
+    <script src="/js/site.js"></script>
+    <script src="~/js/chosen/chosen.jquery.min.js"></script>
+    <script src="~/js/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $(function () {
+            $("#Categories").chosen();
+        });
+    </script>
+    <script>
+        $(function () {
+            $("#Performers").chosen();
+        });
+    </script>
+    <script>
+        $("#ReleaseDate").datetimepicker({
+            format: 'dd-mm-yyyy hh:ii',
+            autoclose: true
+        });
+    </script>
+    <script>
+        $("form :input").attr("autocomplete", "off");
+    </script>
+}

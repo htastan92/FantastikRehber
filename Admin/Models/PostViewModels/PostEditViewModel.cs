@@ -28,19 +28,19 @@ namespace Admin.Models.PostViewModels
         public string ImageUrl { get; set; }
         [Display(Name = "Türü")]
         [Required(ErrorMessage = "Bu alan zorunludur")]
-        public int PostTypeId { get; set; }
+        public int ProductionTypeId { get; set; }
         [Required]
         [Display(Name = "Durum")]
         public int StatusId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreationDate { get; set; }
-        [Display(Name = "Kategori")]
+        [Display(Name = "Kategoriler")]
         [Required]
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public IList<Category> Categories { get; set; }
         [Display(Name = "Resim")]
         [MaxLength(200)]
         public IList<IFormFile> Photos { get; set; }
+        public IList<Category> SelectedCategories { get; set; }
 
     }
 }

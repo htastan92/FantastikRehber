@@ -11,5 +11,6 @@ namespace Admin.Dtos.MemberDtos
     {
         public IList<Member> Members { get; set; }
         public IList<IdentityRole> Roles { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

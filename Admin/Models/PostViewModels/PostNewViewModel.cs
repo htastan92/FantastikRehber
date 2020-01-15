@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using Entities;
 using Microsoft.AspNetCore.Http;
 
@@ -11,6 +9,7 @@ namespace Admin.Models.PostViewModels
 {
     public class PostNewViewModel
     {
+        public int?  PostId { get; set; }
         [Display(Name = "Gönderi Başlığı")]
         [Required(ErrorMessage = "Bu alan zorunludur")]
         [MaxLength(50)]
@@ -22,20 +21,20 @@ namespace Admin.Models.PostViewModels
         [DataType(DataType.Html)]
         public string EditorContent { get; set; }
         [DisplayName("Slug")]
-        [Required]
+        [Required()]
         public string Slug { get; set; }
         public string ImageUrl { get; set; }
         [Display(Name = "Türü")]
         [Required(ErrorMessage = "Bu alan zorunludur")]
-        public int PostTypeId { get; set; }
+        public int ProductionTypeId { get; set; }
         [Required]
         [Display(Name = "Durum")]
         public int StatusId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreationDate { get; set; }
-        [Display(Name = "Kategori")]
+        [Display(Name = "Kategoriler")]
         [Required]
-        public int CategoryId { get; set; }
+        public IList<Category> Categories { get; set; }
         [Display(Name = "Resim")]
         [MaxLength(200)]
         public IList<IFormFile> Photos { get; set; }

@@ -17,7 +17,7 @@ namespace Business.Concrate
             _performerDal = performerDal;
         }
 
-
+        
         public IDataResult<Performer> Get(int? id)
         {
              return new SuccessDataResult<Performer>(_performerDal.Get(p=>p.PerformerId==id));
@@ -28,6 +28,10 @@ namespace Business.Concrate
             return new SuccessDataResult<IList<Performer>>(_performerDal.GetAll());
         }
 
+        public IDataResult<IList<Performer>> GetAllByProductionId(int? productionId)
+        {
+            return new SuccessDataResult<IList<Performer>>(_performerDal.GetAllByProductionId(productionId));
+        }
         public IResult Add(Performer performer)
         {
             _performerDal.Add(performer);
