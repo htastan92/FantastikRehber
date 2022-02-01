@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Admin.Dtos.MemberDtos;
-using DataAccess.Entity;
+﻿using Admin.Dtos.MemberDtos;
 using Microsoft.AspNet.Identity;
+using DataAccess.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Admin.Components
